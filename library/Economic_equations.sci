@@ -268,6 +268,13 @@ function Household_savings = H_Savings_Val_1(H_disposable_income, Household_savi
 		
 endfunction
 
+function Household_savings = H_Savings_Val_2(H_disposable_income, Household_saving_rate)
+
+    /// Household savings constraint (Household_savings)
+    Household_savings = (H_disposable_income - (sum(pC.*C)));
+		
+endfunction
+
 	/// Constraint on balance for closure instead of H_Savings_Val_1 (could be renamed latter - for now, keeping here to clarify that this equation subsitutes the one on HH savings
 	// Can not be used like this for various HH classes -> new constraint of size 1 and not size nb_Households... 
 function y = H_Savings_Const_2(pM, Labour, w)
@@ -2086,6 +2093,13 @@ function G_Consumption_budget = G_ConsumpBudget_Val_5(GDP)
         end
 
     /// Public consumption budget - Proportion of GDP
+endfunction
+
+function G_Consumption_budget = G_ConsumpBudget_Val_6(G, pG)
+
+    /// Public consumption budget - Proportion of GDP
+    G_Consumption_budget = sum(pG.*G);
+    
 endfunction
 
 

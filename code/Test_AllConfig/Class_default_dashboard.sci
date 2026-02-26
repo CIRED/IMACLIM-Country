@@ -25,7 +25,7 @@ function default_dashboard = new_default_dashboard()
     'Labour_product' , 'True', ..
     'World_prices' , 'True', ..
     'X_nonEnerg' , 'True', ..
-    'Invest_matrix' , '%F', ..
+    'Invest_matrix' , '%T', ..
     'CO2_footprint' , 'False', ..
     'Output_files' , '%T', ..
     'Output_prints' , '%F', ..
@@ -47,7 +47,6 @@ function default_dashboard = new_default_dashboard()
     'Time_step_non_etudie','999',..
     'study', 'SNBC3_RunChoices', ..
     'AGG_type', 'AGG_23TME', ..
-    'Invest_matrix', '%T', ..
 	'proj_alpha','false',..
     'proj_imports','false',..
     'proj_exports','false',..
@@ -72,6 +71,7 @@ function default_dashboard = new_default_dashboard()
 	'VAR_sigma_X','', ..
 	'VAR_sigma_M','', ..
 	'VAR_sigma_omegaU','-0.1', ..
-	'Coef_real_wage','1')
- 
+	'Coef_real_wage','1', .. 
+    'with_sufficiency_behaviour','True')
 endfunction
+
