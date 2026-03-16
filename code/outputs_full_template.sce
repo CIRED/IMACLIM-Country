@@ -91,6 +91,7 @@ OutputTable("FullTemplate_"+ref_name)=[["Variables",    "values_"+Name_time];..
 ["Real I Lasp",    money_disp_adj.*sum(Out.I_value)/I_pLasp];..
 ["Real X Lasp",    money_disp_adj.*sum(Out.X_value)/X_pLasp];..
 ["Real M Lasp",    money_disp_adj.*sum(Out.M_value)/M_pLasp];..
+["Real Y Lasp",    money_disp_adj.*sum(Out.Y_value)/Y_pLasp];..
 ["Real_Trade_Balance Lasp",    money_disp_adj.*(sum(Out.X_value)/X_pLasp-sum(Out.M_value)/M_pLasp)];..
 ["Real Y Paas",    money_disp_adj.*sum(Out.Y_value)/Y_pPaas];..
 ["Real GDP Paas",    money_disp_adj.*Out.GDP/GDP_pPaas];..

@@ -197,6 +197,20 @@ elseif Coef_real_wage=="0"
     parameters.Coef_real_wage = 0;
 end
 
+if  VAR_saving=="ref"
+	
+	Deriv_Exogenous.Household_saving_rate = evstr(0.1368939);
+
+elseif VAR_saving=="high"
+
+	Deriv_Exogenous.Household_saving_rate = evstr(0.15);
+
+elseif VAR_saving=="high_2"
+
+	Deriv_Exogenous.Household_saving_rate = evstr(0.17);
+
+end
+
 // if national_preference=="True"
 //     // Secteur automobile: on réduit les importations des voitures étrangères de 50% (On favorise le made in france)
 // 	Proj_Vol.M.val(12) = Proj_Vol.M.val(12)*0.5;
