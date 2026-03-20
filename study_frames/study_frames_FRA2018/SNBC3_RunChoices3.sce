@@ -197,18 +197,25 @@ elseif Coef_real_wage=="0"
     parameters.Coef_real_wage = 0;
 end
 
+
 if  VAR_saving=="ref"
-	
-	Deriv_Exogenous.Household_saving_rate = evstr(0.1368939);
+    if time_step==1 then
+        Deriv_Exogenous.Household_saving_rate = 0.1632678;
+    elseif time_step==2 then
+        Deriv_Exogenous.Household_saving_rate = 0.1962235;
+    elseif time_step==3 then
+        Deriv_Exogenous.Household_saving_rate = 0.2187141;
+    end
+end
 
-elseif VAR_saving=="high"
-
-	Deriv_Exogenous.Household_saving_rate = evstr(0.15);
-
-elseif VAR_saving=="high_2"
-
-	Deriv_Exogenous.Household_saving_rate = evstr(0.17);
-
+if  VAR_saving=="moderate"
+    if time_step==1 then
+        Deriv_Exogenous.Household_saving_rate = 0.1739711;
+    elseif time_step==2 then
+        Deriv_Exogenous.Household_saving_rate = 0.2138841;
+    elseif time_step==3 then
+        Deriv_Exogenous.Household_saving_rate = 0.2409163;
+    end
 end
 
 // if national_preference=="True"
@@ -221,7 +228,7 @@ end
 // end
 
 if time_step==1
-    if Scenario=="AMSrun3mixnote"
+    if Scenario=="AMSrun3mixnote" | Scenario=="AMSrun3mixnotebis"
         if with_sufficiency_behaviour=="Construction X Chauffage X Gaspillage alimentaire X Achat vehicules neufs X Deplacements X OthEq X Electromenager X OtherManufacturedGoods"
 
             ////// 1 - Choc Construction durable et Zéro artificialisation nette ////////
@@ -275,7 +282,7 @@ end
         
 
 if time_step==2
-    if Scenario=="AMSrun3mixnote"
+    if Scenario=="AMSrun3mixnote" | Scenario=="AMSrun3mixnotebis"
         if with_sufficiency_behaviour=="Construction X Chauffage X Gaspillage alimentaire X Achat vehicules neufs X Deplacements X OthEq X Electromenager X OtherManufacturedGoods"
 
             ////// 1 - Choc Construction durable et Zéro artificialisation nette ////////
@@ -327,7 +334,7 @@ if time_step==2
 end
 
 if time_step==3
-    if Scenario=="AMSrun3mixnote"
+    if Scenario=="AMSrun3mixnote" | Scenario=="AMSrun3mixnotebis"
         if with_sufficiency_behaviour=="Construction"
             ////// 1 - Choc Construction durable et Zéro artificialisation nette ////////
             // Construction: -50% de la construction neuve avec la zero artificialisation des sols

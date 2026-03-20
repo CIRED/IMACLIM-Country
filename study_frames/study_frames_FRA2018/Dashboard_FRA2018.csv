@@ -23,8 +23,8 @@ MaPrimRenov;False
 stranded_assets;False
 pY_gas_reduced_v1;False
 eq_G_ConsumpBudget;
-skip_calibration;false
-VAR_saving;99
+skip_calibration;True
+VAR_saving;moderate
 exports_drive;true
 imports_drive;
 Macro_nb;SNBC3_run3dgt3
@@ -53,7 +53,7 @@ Bonus_vehicule_dashboard;False
 VAR_sigma_CES;
 VAR_ConstrainedShare_Capital;
 VAR_sigma_KE;
-Scenario;AMSrun3mixnote
+Scenario;AMSrun3mixnotebis
 auto_c;
 const_c;
 coeff_constraint;
