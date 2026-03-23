@@ -103,6 +103,7 @@ for country = countries
             launch_ImaclimS();
         catch
             printf('\n************** ERROR **************\n');
+            printf('Error message: %s\n', lasterror());
             nb_errors = nb_errors + 1;
             csvWrite(dash, NOT_WORKING + RunName + filesep() + ..
             string(nb_tests) + '_' + country.dashboard_file,";");
