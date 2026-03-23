@@ -1,7 +1,7 @@
 ---
-title: "Getting Started with Imaclim Using Quarto"
-subtitle: "A Beginner's Guide to Documenting and Running Imaclim Models"
-author: "Your Name"
+title: "Getting Started with Imaclim-S"
+subtitle: "A Beginner's Guide to Documenting and Running Imaclim-S Model"
+
 date: today
 date-format: "MMMM D, YYYY"
 format:
@@ -15,17 +15,28 @@ format:
       - bottom=25mm
       - left=25mm
       - right=25mm
-  docx:
-    toc: true
-    toc-depth: 3
-    number-sections: true
-    highlight-style: github
+    include-in-header:
+      text: |
+        \usepackage{xcolor}
+        \definecolor{CIRED_blue}{RGB}{0,140,80}
+        \definecolor{CIRED_lightblue}{RGB}{139,186,191}
+        \definecolor{CIRED_darkgrey}{RGB}{40,40,40}
+        \definecolor{CIRED_lightgrey}{RGB}{80,80,80}
+        \AtBeginDocument{\addtocontents{toc}{\protect\thispagestyle{empty}}}
+    toc-title: "Table of Contents"
+      
+  # docx:
+  #   toc: true
+  #   toc-depth: 3
+  #   number-sections: true
+  #   highlight-style: github
 execute:
   echo: true
   warning: false
   message: false
 ---
 
+\newpage 
 # Introduction
 
 ## What is Imaclim?
@@ -38,98 +49,78 @@ execute:
 
 Imaclim is typically implemented in **Scilab**, an open-source numerical computing environment.
 
-## What is Quarto?
-
-**Quarto** is a modern, open-source scientific publishing system. Think of it as a powerful notebook that lets you:
-
-- Write text (in Markdown) and code **in the same document**
-- Produce outputs in multiple formats: **PDF**, **Word (.docx)**, **HTML**, and presentations
-- Keep your analysis, results, and commentary all in one place
-
-This tutorial will show you how to use Quarto to document your Imaclim runs, present results, and produce professional reports.
-
 ## Prerequisites
 
 Before you start, make sure you have:
 
 1. **Scilab** installed — [https://www.scilab.org](https://www.scilab.org)
-2. **Quarto** installed — [https://quarto.org](https://quarto.org)
-3. **R** or **Python** installed (for post-processing results and producing charts)
+3. **Python** installed (for post-processing results and producing charts)
 4. The **IMACLIM-Country** repository cloned locally from GitHub:
-   [https://github.com/GaelleLeTreut/IMACLIM-Country/tree/SNBC3_run3_122025](https://github.com/GaelleLeTreut/IMACLIM-Country/tree/SNBC3_run3_122025)
+   [https://github.com/CIRED/IMACLIM-Country/tree/tutorial_imaclim](https://github.com/CIRED/IMACLIM-Country/tree/tutorial_imaclim)
 
-> **Important:** This tutorial is based on the branch **SNBC3_run3_122025**. Make sure you are on this branch before proceeding.
+> **Important:** This tutorial is based on the branch **tutorial_imaclim**. Make sure you cloned on this branch before proceeding.
 
 ## Key Documentation
 
-Two essential references for understanding the model:
+Two essential references for understanding how the model works:
 
 - **Gaëlle Le Treut's thesis** (most up-to-date summary of IMACLIM-S):
   [https://hal.science/tel-01707559](https://hal.science/tel-01707559)
-- **IMACLIM equations reference document**:
-  [https://www.centre-cired.fr/wp-content/uploads/2020/09/cired_wp_2020_85_le_treut.pdf](https://www.centre-cired.fr/wp-content/uploads/2020/09/cired_wp_2020_85_le_treut.pdf)
+- **IMACLIM equations reference document** (equations of the IMACLIM-S model): 
+  [IMACLIM-S equations](https://www.centre-cired.fr/wp-content/uploads/2020/09/cired_wp_2020_85_le_treut.pdf)
 
 ---
 
-# Setting Up Your Project
-
-## Repository Structure
+\newpage
+# Repository Structure
 
 Once cloned, the IMACLIM-Country repository is organised as follows:
 
-```
+```text
 IMACLIM-Country/
 │
-├── code/                        # Scilab scripts to run the model
-│   ├── ImaclimS.sce             # Main entry point — run this to launch a simulation
-│   ├── Macro_Framework.sce      # Macro variables framework
-│   ├── outputs_full_template.sce # Saves output variables
-│   └── Test_AllConfig/
-│       ├── main.sce             # Creates dashboards with variants
-│       ├── main1.sce            # Runs all variant simulations
-│       ├── def_of_MacroIncFRA.sce  # Declares variants to test
-│       └── Class_default_dashboard.sci
+├── code/                          # Scilab scripts to run the model
+│   ├── ImaclimS.sce               # Run this to launch an IMACLIM-S simulation
+│   ├── outputs_full_template.sce  # Saves output variables
+│   └── Test_AllConfig/                    # Scripts to run multiple variants    
+│       ├── run_dashboards.sce             # Creates dashboards with variants
+│       ├── run_modelisations.sce          # Runs all variant simulations
+│       ├── def_of_MacroIncFRA.sce         # Declares variants to test
+│       └── SCNBC_RunChoice3.sce           # Contains variant logic for scenarios
 │
-├── study_frames/                # All model input variables
+├── study_frames/                   # All model input variables
 │   └── study_frames_FRA2018/
 │       ├── Dashboard_FRA2018.csv   # Main dashboard (entry point for variables)
 │       ├── Country_Selection.csv   # Select which country to study
 │       └── AMSrun3mixnote/         # Scenario-specific input matrices
-│           ├── IOT_Qtities_AMSrun3mixnote_1.csv  # Inputs for 2030
-│           ├── IOT_Qtities_AMSrun3mixnote_2.csv  # Inputs for 2040
-│           └── IOT_Qtities_AMSrun3mixnote_3.csv  # Inputs for 2050
+│           ├── IOT_Qtities_AMSrun3mixnote_1.csv  # I/O table for 2030
+│           ├── IOT_Qtities_AMSrun3mixnote_2.csv  # I/O table for 2040
+│           └── IOT_Qtities_AMSrun3mixnote_3.csv  # I/O table for 2050
 │
 ├── Library/
 │   └── economic_equations.sci   # All model equations
 │
 └── outputs/                     # Results written here after each run
-    └── AMSrun3mixnote/
+    └── AMSrun3mixnote.../
         ├── FullTemplate_AMSrun3mixnote.csv  # All variables, all years
-        └── Summary_AMSrun3mixnote.csv       # Key variables only
+        └── Dashboard_FRA2018.csv            # Dashboard used for this run
 ```
 
-## Creating Your First Quarto Document
 
-Create a new file called `imaclim_report.qmd`. The `.qmd` extension stands for **Quarto Markdown**. Every Quarto document starts with a **YAML header** (the block between the `---` lines) that controls the document's settings:
+The repository is organised around four main folders:
 
-```yaml
----
-title: "Imaclim Scenario Analysis"
-author: "Your Name"
-date: today
-format:
-  pdf:
-    toc: true
-  docx:
-    toc: true
----
-```
-
-To **render** your document to PDF and Word, run this command in your terminal:
-
-```bash
-quarto render imaclim_report.qmd
-```
+- **`code/`** contains all 
+the Scilab scripts that drive the model — `ImaclimS.sce` is the main entry point 
+for a single simulation, while the `Test_AllConfig/` subfolder contains the scripts 
+needed to run multiple variants in batch. 
+- **`study_frames/`** holds all the input 
+data for the model: the Dashboard sets the scenario configuration, 
+`Country_Selection.csv` defines the country studied, and the scenario subfolders 
+(e.g. `AMSrun3mixnote/`) contain the input-output tables for each projection year 
+(2030, 2040, 2050). 
+- **`Library/`** contains the core economic equations of IMACLIM-S 
+— useful to consult when interpreting model behaviour. 
+- **`outputs/`** is where all simulation results are written after each run, with one subfolder per scenario containing the full results template and the dashboard used for that run.
 
 ---
 
@@ -146,20 +137,20 @@ The model is calibrated to a **base year** (2018 for France). This means all mod
 These are variables that are set *outside* the model — typically projections about the future that you feed in. Examples include:
 
 - Population growth and labour productivity
-- Household saving rates (`VAR_saving`)
+- Household saving rates 
 - Energy and world commodity prices
 - Carbon tax settings
 
-> **Note:** If a variable is not present in the resolution system, it is treated as exogenous by default.
+> **Note:** If a variable is not present in the resolution system (in the folder `code/Systeme_Resolution`), it is treated as exogenous by default.
 
 **3. Scenarios**
-A scenario defines a particular set of assumptions and policy choices. The main scenario used in this tutorial is `AMSrun3mixnote`. Variants are created by changing specific variables (e.g., household consumption in the aviation sector).
+A scenario defines a particular set of assumptions and policy choices. The main scenario used in this tutorial is `AMSrun3mixnote`. You can find the input tables of this scenario in the folder `study_frames/study_frames_FRA2018/AMSrun3mixnote/`. Variants are created by changing specific variables (e.g., household consumption in the aviation sector).
 
 ## The Dashboard
 
 The **Dashboard** (`study_frames/study_frames_FRA2018/Dashboard_FRA2018.csv`) is the central control file for any simulation. It contains all the variables that drive the model. Here is an annotated excerpt of the most important variables:
 
-```
+```text
 /// Simulation ///
 Scenario;AMSrun3mixnote       // Name of the scenario
 Nb_Iter;3                     // Number of iterations (2018 to 2050)
@@ -167,7 +158,7 @@ skip_calibration;True         // Skip calibration to save time
 
 /// Households ///
 H_DISAGG;HH1                  // Number of household income groups (1–10 deciles)
-VAR_saving;99                 // Variant on the household saving rate
+VAR_saving;ref                // Variant on the household saving rate
 
 /// Sector aggregation ///
 AGG_type;AGG_23TME            // Use the 23-sector version of the model
@@ -186,7 +177,6 @@ World_prices;True             // Import energy prices active (gas, oil...)
 
 /// Variant simulations ///
 study;SNBC3_RunChoices3       // RunChoice file used for variants
-VAR_C_airtransp;              // Variant on aviation household consumption
 ```
 
 ## The Reference Scenario
@@ -199,9 +189,9 @@ The reference scenario (`ref`) is always your baseline. All other scenarios are 
 
 ## Step 1 — Select the Country
 
-If this is your first time using the model, open the file `study_frames/Country_Selection.csv` and uncomment the country you want to study:
+If this is your first time using the model, open the file `study_frames/Country_Selection.csv` and uncomment the country you want to study (here FRA2018):
 
-```
+```scilab
 // For a study on France:
 Country;France;FRA2018
 ```
@@ -217,19 +207,40 @@ exec ImaclimS.sce
 ```
 
 This launches a simulation using the dashboard at:
-`study_frames/study_frames_FRA2018/Dashboard_FRA2018.csv`
+study_frames/study_frames_FRA2018/Dashboard_FRA2018.csv. The command `clear` ensures you start with a clean workspace. 
+
+The model will run through the calibration phase (if not skipped) and then produce projections for each time step (2030, 2040, 2050). Depending on your computer's processing power, this may take several minutes.
 
 Results are saved automatically to the `outputs/` folder.
 
 ## Step 3 — Explore the Results
 
-Once the simulation finishes, two output files are available for the scenario `AMSrun3mixnote`:
+Once the simulation finishes, a new directory with all the results will be created in `outputs/` — e.g. `outputs/AMSrun3mixnote/`. The key output files to explore are:
 
-| File | Content |
-|------|---------|
-| `outputs/AMSrun3mixnote/FullTemplate_AMSrun3mixnote.csv` | All variables, all years (2018–2050) |
-| `outputs/AMSrun3mixnote/Summary_AMSrun3mixnote.csv` | Key variables only |
-| `outputs/AMSrun3mixnote/Time_2030/ioQ-run_2030_AMSrun3mixnote.csv` | Input-output quantities for 2030 |
+| File |
+|------|
+| `outputs/AMSrun3mixnote/FullTemplate_AMSrun3mixnote.csv` 
+| `outputs/AMSrun3mixnote/Time_2030/ioQ-run_2030_AMSrun3mixnote.csv` 
+
+
+The output folder is composed of three mains files: 
+
+- `Dashboard_FRA2018.csv`: the dashboard used for this run (copy of the one in study_frames)
+- `FullTemplate_AMSrun3mixnote.csv`: the full template with all variables for all years
+- Folders prediction for each time step (2030, 2040, 2050) with key variables for that year (e.g. ioQ-run_2030_AMSrun3mixnote.csv)
+
+
+For each time step (here 2030, 2040, 2050), you have the prediction for each key variable of the model:
+
+- **ioQ**: input-output table quantities
+- **Prices**: prices of each good
+- **ecoT**: main variables consumption of investment, consumption, netlending of each agents (households, firms, government) of the model 
+- **CO2Emiss**: CO2 emissions by sector
+- **TechCoeff**: technical coefficients of the model (capital productivity, labour productivity...)
+- **Trad_sectors**: trade flows by sector
+
+> **Note:** If a file contains `run` in its name, it corresponds to the model's projection for the year studied. If the file contains `ini`, this correspond to the result of the previous time step that was used to compute the projection of the current one. IMACLIM-S is a recursive model, so the projection for 2040 depends on the results of 2030, and the projection for 2050 depends on the results of 2040.
+
 
 ---
 
@@ -239,13 +250,7 @@ One of Imaclim's core strengths is simulating the macroeconomic impact of a **sh
 
 The aviation sector corresponds to row 19 of the household consumption vector: `Proj_Vol.C.val(19)`.
 
-There are two ways to create a shock in Imaclim.
-
-## Method 1 — Shock via the Dashboard (recommended)
-
-This is the preferred method as it keeps everything traceable and reproducible.
-
-### Step 1 — Declare the variants in the RunChoice file
+## Step 1 — Declare the variants in the RunChoice file {.unnumbered}
 
 Open `code/Test_AllConfig/SCNBC_RunChoice3.sce` and add the variant logic for your new variable:
 
@@ -264,7 +269,7 @@ if Scenario == "AMSrun3mixnote"
 end
 ```
 
-### Step 2 — Register the variants to test
+## Step 2 — Register the variants to test in def_of_MacroIncFRA.sce {.unnumbered}
 
 Open `code/Test_AllConfig/def_of_MacroIncFRA.sce` and add your variable:
 
@@ -272,7 +277,9 @@ Open `code/Test_AllConfig/def_of_MacroIncFRA.sce` and add your variable:
 test_fra_macro.VAR_C_airtransp = ['ref', '-10%', '-20%'];
 ```
 
-### Step 3 — Add the variable to the default dashboard class
+> **Note:** The file `def_of_MacroIncFRA.sce` is used to create the different variants of the scenario. This file is used to create the different dashboards in the step 6.
+
+## Step 3 — Add the variable to the default dashboard class {.unnumbered}
 
 Open `code/Test_AllConfig/Class_default_dashboard.sci` and declare the variable:
 
@@ -283,7 +290,7 @@ default_dashboard = struct( ..
     'VAR_C_airtransp', '');
 ```
 
-### Step 4 — Add the variable to the main Dashboard CSV
+## Step 4 — Add the new variable to the main Dashboard CSV {.unnumbered}
 
 Open `study_frames/study_frames_FRA2018/Dashboard_FRA2018.csv` and add:
 
@@ -291,19 +298,21 @@ Open `study_frames/study_frames_FRA2018/Dashboard_FRA2018.csv` and add:
 VAR_C_airtransp;-20%
 ```
 
-### Step 5 — Add the variable to the output template
+This step is important to follow the trace of your variable in the dashboard used for the simulation. 
 
-Open `code/outputs_full_template.sce` so the variable is saved in results:
+## Step 5 — Add the new variable to the output template (optional) {.unnumbered}
+
+If you want to track your new variable in the output template, you can add it in the file `code/outputs_full_template.sce`:
 
 ```scilab
 ["VAR_C_airtransp", VAR_C_airtransp];
 ```
 
-### Step 6 — Generate the dashboards
+## Step 6 — Generate the dashboards {.unnumbered}
 
 ```scilab
 cd('IMACLIM-Country\code\Test_AllConfig')
-exec main.sce
+exec run_dashboards.sce
 ```
 
 This creates an intermediate file `code/Test_AllConfig/dashboards.dat` containing one dashboard per variant. You can inspect them in Scilab:
@@ -313,257 +322,18 @@ dashboards      // lists all dashboards
 dashboards(1)   // shows the first dashboard — check your changes are there
 ```
 
-### Step 7 — Run all variant simulations
+## Step 7 — Run all variant simulations {.unnumbered}
 
 ```scilab
-exec main1.sce
+exec run_simulations.sce
 ```
 
-This runs each dashboard in turn and saves results for each variant in the `outputs/` folder.
+This runs each dashboard in turn and saves results for each variant in the `outputs/` folder. You can then study and compare the results of the simulations in the output files.
 
-## Method 2 — Manual Shock on Input Files
-
-This method is quicker for one-off experiments but less traceable.
-
-1. Go to `study_frames/study_frames_FRA2018/AMSrun3mixnote/`
-2. Copy and rename the folder — e.g. `AMSrun3mixlow`
-3. Rename **all files** inside the new folder to match the new scenario name (every filename must contain `AMSrun3mixlow`)
-4. Open `IOT_Qtities_AMSrun3mixlow_1.csv` (projection for 2030) and manually edit cell **Y20** to reduce aviation consumption. Repeat for `_2` (2040) and `_3` (2050) if needed.
-5. Update the main dashboard to point to the new scenario:
-   ```
-   Scenario;AMSrun3mixlow
-   ```
-6. Run the simulation:
-   ```scilab
-   clear
-   exec ImaclimS.sce
-   ```
-
-## Analysing the Shock Results
-
-Once the simulation is complete, compare the variant outputs against the reference:
-
-| File | Use |
-|------|-----|
-| `outputs/AMSrun3mixnote/FullTemplate_AMSrun3mixnote.csv` | All variables before/after shock |
-| `outputs/AMSrun3mixnote/Summary_AMSrun3mixnote.csv` | Key variables summary |
-| `outputs/AMSrun3mixnote/Time_2050/ecoT-run_2050_AMSrun3mixnote.csv` | Agent net lending (deficit) for 2050 |
-
-> **Tip:** `code/Macro_Framework.sce` is an important file for understanding how macro variables interact — refer to it when interpreting shock results.
-
----
-
-# Analysing Results in Quarto
-
-## Loading Results
-
-Inside your `.qmd` file, you can load and process your Imaclim output directly. Here is an example using **R**:
-
-```{{r}}
-#| label: load-data
-#| echo: true
-
-# Load results from the reference scenario
-results_ref <- read.csv("../outputs/results_ref.csv")
-
-# Quick look at the data
-head(results_ref)
-```
-
-Or using **Python**:
-
-```{{python}}
-#| label: load-data-python
-
-import pandas as pd
-
-results_ref = pd.read_csv("../outputs/results_ref.csv")
-print(results_ref.head())
-```
-
-## Plotting GDP Over Time
-
-A typical first plot is **GDP evolution** across time steps:
-
-```{{r}}
-#| label: fig-gdp
-#| fig-cap: "GDP evolution under the reference scenario"
-
-library(ggplot2)
-
-ggplot(results_ref, aes(x = year, y = GDP)) +
-  geom_line(color = "#2E75B6", linewidth = 1.2) +
-  geom_point(color = "#2E75B6", size = 2.5) +
-  labs(
-    title = "GDP — Reference Scenario",
-    x = "Year",
-    y = "GDP (billion EUR, constant prices)"
-  ) +
-  theme_minimal()
-```
-
-## Comparing Scenarios
-
-To compare the reference scenario with a carbon tax scenario, you can overlay the two:
-
-```{{r}}
-#| label: fig-scenario-comparison
-#| fig-cap: "GDP comparison: Reference vs Carbon Tax"
-
-results_carbon_tax <- read.csv("../outputs/results_carbon_tax.csv")
-
-# Add a scenario label to each dataset
-results_ref$scenario        <- "Reference"
-results_carbon_tax$scenario <- "Carbon Tax"
-
-# Combine
-all_results <- rbind(results_ref, results_carbon_tax)
-
-ggplot(all_results, aes(x = year, y = GDP, color = scenario)) +
-  geom_line(linewidth = 1.2) +
-  geom_point(size = 2.5) +
-  scale_color_manual(values = c("Reference" = "#2E75B6",
-                                "Carbon Tax" = "#E05C2A")) +
-  labs(
-    title = "GDP: Reference vs Carbon Tax Scenario",
-    x = "Year",
-    y = "GDP (billion EUR, constant prices)",
-    color = "Scenario"
-  ) +
-  theme_minimal()
-```
-
----
-
-# Writing Your Report
-
-## Mixing Text and Results
-
-One of Quarto's most powerful features is **inline code** — you can embed computed values directly in your text. For example:
-
-```markdown
-The GDP in the final year of the reference scenario is 
-`r round(tail(results_ref$GDP, 1), 1)` billion EUR.
-```
-
-This will automatically insert the correct number when the document is rendered — no copy-pasting required.
-
-## Cross-References
-
-You can reference figures and tables automatically:
-
-```markdown
-As shown in @fig-gdp, the economy grows steadily 
-under the reference scenario.
-```
-
-## Adding a Summary Table
-
-```{{r}}
-#| label: tbl-summary
-#| tbl-cap: "Key indicators — Reference Scenario"
-
-library(knitr)
-
-summary_table <- data.frame(
-  Indicator = c("GDP (final year)", "CO2 emissions (final year)",
-                "Household consumption", "Investment"),
-  Value     = c("3,250 bn EUR", "320 MtCO2", "1,850 bn EUR", "620 bn EUR"),
-  Unit      = c("constant 2019 EUR", "MtCO2eq", 
-                "constant 2019 EUR", "constant 2019 EUR")
-)
-
-kable(summary_table)
-```
-
----
-
-# Rendering Your Document
-
-## Render to Both PDF and Word
-
-To render to both formats at once, simply run:
-
-```bash
-quarto render imaclim_report.qmd
-```
-
-Quarto will produce:
-
-- `imaclim_report.pdf`
-- `imaclim_report.docx`
-
-## Render to a Specific Format Only
-
-```bash
-# PDF only
-quarto render imaclim_report.qmd --to pdf
-
-# Word only
-quarto render imaclim_report.qmd --to docx
-```
-
-## Previewing While You Write
-
-During drafting, use `quarto preview` to see a live-updating HTML version in your browser:
-
-```bash
-quarto preview imaclim_report.qmd
-```
-
----
-
-# Tips and Good Practices
-
-## Keep Code and Documentation Together
-
-The main advantage of Quarto is that your code, outputs, and commentary live in one file. If you re-run the model with updated data, simply re-render the document — all tables and figures update automatically.
-
-## Use `echo: false` for Clean Reports
-
-If you want to show results but hide the code in the final report:
-
-```yaml
-execute:
-  echo: false
-```
-
-Or for a single chunk:
-
-```{{r}}
-#| echo: false
-# This code runs but won't appear in the report
-```
-
-## Version Control
-
-Put your `.qmd` files under **Git** version control. This lets you track changes to your analysis over time and collaborate with colleagues.
-
-```bash
-git init
-git add .
-git commit -m "Initial Imaclim Quarto tutorial"
-```
-
----
-
-# Next Steps
-
-Now that you have a working Quarto setup for Imaclim, here are some things to explore next:
-
-1. **Add more scenarios** — create a function that loops over all scenarios and produces a combined comparison figure automatically.
-2. **Parameterize your document** — use Quarto parameters to run the same report template for different countries or time horizons.
-3. **Publish online** — use `quarto publish` to share your report as a website via GitHub Pages or Quarto Pub.
-4. **Automate the pipeline** — combine the Scilab run and the Quarto render in a single shell script so everything runs end-to-end with one command.
-
----
 
 # Resources
 
-- **Quarto documentation**: [https://quarto.org/docs](https://quarto.org/docs)
 - **Scilab documentation**: [https://www.scilab.org/documentation](https://www.scilab.org/documentation)
 - **IMACLIM-Country GitHub repository**: [https://github.com/GaelleLeTreut/IMACLIM-Country](https://github.com/GaelleLeTreut/IMACLIM-Country)
 - **Gaëlle Le Treut's thesis (IMACLIM-S reference)**: [https://hal.science/tel-01707559](https://hal.science/tel-01707559)
 - **IMACLIM equations document**: [https://www.centre-cired.fr/wp-content/uploads/2020/09/cired_wp_2020_85_le_treut.pdf](https://www.centre-cired.fr/wp-content/uploads/2020/09/cired_wp_2020_85_le_treut.pdf)
-- **ggplot2 (R)**: [https://ggplot2.tidyverse.org](https://ggplot2.tidyverse.org)
-- **Matplotlib (Python)**: [https://matplotlib.org](https://matplotlib.org)

@@ -4,7 +4,13 @@ General equilibrium model for energy transition analysis
 The version v1 is corresponding to the IMACLIM-S France by relying on the French database:
 Le Treut, Gaëlle; Ghersi, Frédéric (2018), “Hybrid Input-Output tables for France at year 2010”, Mendeley Data, v1 http://dx.doi.org/10.17632/gyv6hxcwt3.1
 
+### Get started
+To get started with the IMACLIM-S model, you can read the IMACLIM_tutorial.pdf.
 
+\IMACLIM-Country\IMACLIM_tutorial.pdf
+
+
+### Copyright
 
 //////  Copyright or © or Copr. Ecole des Ponts ParisTech / CNRS 2018
 //////  Main Contributor (2017) : Gaëlle Le Treut / letreut[at]centre-cired.fr
