@@ -208,6 +208,86 @@ if  VAR_saving=="ref"
     end
 end
 
+if  VAR_saving=="ref +1%"
+    if time_step==1 then
+        Deriv_Exogenous.Household_saving_rate = 0.1632678 + 0.01;
+    elseif time_step==2 then
+        Deriv_Exogenous.Household_saving_rate = 0.1962235 + 0.01;
+    elseif time_step==3 then
+        Deriv_Exogenous.Household_saving_rate = 0.2187141 + 0.01;
+    end
+end
+
+if  VAR_saving=="ref +2%"
+    if time_step==1 then
+        Deriv_Exogenous.Household_saving_rate = 0.1632678 + 0.02;
+    elseif time_step==2 then
+        Deriv_Exogenous.Household_saving_rate = 0.1962235 + 0.02;
+    elseif time_step==3 then
+        Deriv_Exogenous.Household_saving_rate = 0.2187141 + 0.02;
+    end
+end
+
+if  VAR_saving=="ref +3%"
+    if time_step==1 then
+        Deriv_Exogenous.Household_saving_rate = 0.1632678 + 0.03;
+    elseif time_step==2 then
+        Deriv_Exogenous.Household_saving_rate = 0.1962235 + 0.03;
+    elseif time_step==3 then
+        Deriv_Exogenous.Household_saving_rate = 0.2187141 + 0.03;
+    end
+end
+
+if  VAR_saving=="ref +4%"
+    if time_step==1 then
+        Deriv_Exogenous.Household_saving_rate = 0.1632678 + 0.04;
+    elseif time_step==2 then
+        Deriv_Exogenous.Household_saving_rate = 0.1962235 + 0.04;
+    elseif time_step==3 then
+        Deriv_Exogenous.Household_saving_rate = 0.2187141 + 0.04;
+    end
+end
+
+if  VAR_saving=="ref -1%"
+    if time_step==1 then
+        Deriv_Exogenous.Household_saving_rate = 0.1632678 - 0.01;
+    elseif time_step==2 then
+        Deriv_Exogenous.Household_saving_rate = 0.1962235 - 0.01;
+    elseif time_step==3 then
+        Deriv_Exogenous.Household_saving_rate = 0.2187141 - 0.01;
+    end
+end
+
+if  VAR_saving=="ref -2%"
+    if time_step==1 then
+        Deriv_Exogenous.Household_saving_rate = 0.1632678 - 0.02;
+    elseif time_step==2 then
+        Deriv_Exogenous.Household_saving_rate = 0.1962235 - 0.02;
+    elseif time_step==3 then
+        Deriv_Exogenous.Household_saving_rate = 0.2187141 - 0.02;
+    end
+end
+
+if  VAR_saving=="ref -3%"
+    if time_step==1 then
+        Deriv_Exogenous.Household_saving_rate = 0.1632678 - 0.03;
+    elseif time_step==2 then
+        Deriv_Exogenous.Household_saving_rate = 0.1962235 - 0.03;
+    elseif time_step==3 then
+        Deriv_Exogenous.Household_saving_rate = 0.2187141 - 0.03;
+    end
+end
+
+if  VAR_saving=="ref -4%"
+    if time_step==1 then
+        Deriv_Exogenous.Household_saving_rate = 0.1632678 - 0.04;
+    elseif time_step==2 then
+        Deriv_Exogenous.Household_saving_rate = 0.1962235 - 0.04;
+    elseif time_step==3 then
+        Deriv_Exogenous.Household_saving_rate = 0.2187141 - 0.04;
+    end
+end
+
 if  VAR_saving=="moderate"
     if time_step==1 then
         Deriv_Exogenous.Household_saving_rate = 0.1739711;

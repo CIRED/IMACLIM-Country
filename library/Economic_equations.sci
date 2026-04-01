@@ -558,6 +558,48 @@ function y = H_demand_Const_2(Consumption_budget, C, ConstrainedShare_C, pC, CPI
     
 endfunction
 
+
+
+///	Linear demand function with price and income elasticities for all goods - 
+// Instead of having a report of the consumption to the services, we have a report on the LandTransport sector
+function y = H_demand_Const_2_LandTranport(Consumption_budget, C, ConstrainedShare_C, pC, CPI, sigma_pC, sigma_ConsoBudget) ;
+    // TOCLEAN
+    signRuben = sign(pC);
+    pC = abs ( pC);
+	Consumption_budget = abs(Consumption_budget);
+
+	y1 = zeros(nb_Commodities, nb_Households) ;
+	
+	// IF only one elasticities for all sectors ( in Brazil, sectoral differenciation) 
+	if size(sigma_ConsoBudget,"r")==1
+	sigma_ConsoBudget = sigma_ConsoBudget .*. ones(nb_Sectors, 1);
+	end
+    
+    // TOCLEAN
+	//// Warning code: assuming that the last sector in the matrix is the composite one 
+    y1(1:nb_Sectors-1, :) = C(1:nb_Sectors-1, :) - (1+delta_C_parameter(1:nb_Sectors-1)').^time_since_BY.*.(ones(1,nb_Households)).* .. 
+(ConstrainedShare_C(1:nb_Sectors-1, :) .* BY.C(1:nb_Sectors-1, :) + (1 - ConstrainedShare_C(1:nb_Sectors-1, :)) .* BY.C(1:nb_Sectors-1, :) .* ( (pC(1:nb_Sectors-1, :)/CPI) ./ (BY.pC(1:nb_Sectors-1, :)/BY.CPI) ).^ sigma_pC(1:nb_Sectors-1, :) .* (( ((Consumption_budget.*.ones(nb_Sectors-1, 1))./CPI) ./ ((BY.Consumption_budget.*.ones(nb_Sectors-1, 1))./BY.CPI) ) .^ sigma_ConsoBudget(1:nb_Sectors-1, :) ) );
+
+	/// Replace C by the one that are informed if so
+    if is_projected('C') then
+        y1 = apply_proj_eq(y1,C,'C');
+    end
+
+	// Remaining budget goes to composite
+    LandTransport_budget = Consumption_budget - sum(pC([1:16, 18:nb_Sectors], :) .* C([1:16, 18:nb_Sectors], :), "r");
+
+    disp("LandTransport_budget:")
+    disp(LandTransport_budget)
+    pause
+
+	y1 (17,:) = pC(17,:) .* C(17,:) - LandTransport_budget ;
+	
+    y = matrix(y1 .* signRuben, -1 , 1) ;
+    pause
+
+    
+endfunction
+
 ///	Linear demand function with price and income elasticities for all goods - 
 // Val not possible : this function depends on C
 function y = H_demand_Const_2bis(Consumption_budget, C, ConstrainedShare_C, pC, CPI, sigma_pC, sigma_ConsoBudget) ;

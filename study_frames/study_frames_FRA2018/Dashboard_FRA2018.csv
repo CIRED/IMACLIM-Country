@@ -23,8 +23,8 @@ MaPrimRenov;False
 stranded_assets;False
 pY_gas_reduced_v1;False
 eq_G_ConsumpBudget;
-skip_calibration;True
-VAR_saving;moderate
+skip_calibration;false
+VAR_saving;ref
 exports_drive;true
 imports_drive;
 Macro_nb;SNBC3_run3dgt3
@@ -32,7 +32,7 @@ Proj_scenario;SNBC3_run3totalamsmixc2bis
 Nb_Iter;3
 emissions_bioenergy;True
 pY_gas_reduced_v2;false
-SystemOpt_Resol;SystemOpt_Static_neokeynesien_services
+SystemOpt_Resol;SystemOpt_Static_neokeynesien_landTransport
 Time_step_non_etudie;999
 study;SNBC3_RunChoices3
 AGG_type;AGG_23TME
@@ -61,4 +61,4 @@ VAR_sigma_X;threeme
 VAR_sigma_M;threeme
 VAR_sigma_omegaU;-0.1
 Coef_real_wage;1
-with_sufficiency_behaviour;Construction X Chauffage X Gaspillage alimentaire X Achat vehicules neufs X Deplacements X OthEq X Electromenager X OtherManufacturedGoods
+with_sufficiency_behaviour;False
