@@ -44,6 +44,7 @@ function default_dashboard = new_default_dashboard()
     'emissions_bioenergy', 'True', ..
     'pY_gas_reduced_v2', 'True', ..
     'SystemOpt_Resol', 'SystemOpt_Static_neokeynesien', ..
+    'Multireport_budget_share', '', ..
     'Time_step_non_etudie','999',..
     'study', 'SNBC3_RunChoices', ..
     'AGG_type', 'AGG_23TME', ..

@@ -2,6 +2,8 @@
 MPR_share = 0;
 Bonus_vehicules_share = 0;
 
+
+
 //////////////////////////////////////////////// WAGE CURVE  /////////////////////////////////////////////////////////////////////////////////////
 // parameters.Coef_real_wage = strtod(Coef_real_wage_dashboard);
 // parameters.sigma_omegaU = strtod(sigma_omegaU_dashboard);
@@ -197,6 +199,22 @@ elseif Coef_real_wage=="0"
     parameters.Coef_real_wage = 0;
 end
 
+if SystemOpt_Resol== 'SystemOpt_Static_neokeynesien_multiReport'
+    if Multireport_budget_share=="Multireport_budget_share_ref"
+        share_landtransport = 0.0314357;
+        share_property_business = 0.3789194;
+        share_composite = 0.5896448;
+    elseif Multireport_budget_share=="Multireport_major_landTransport"
+        share_landtransport = 0.036283;
+        share_property_business = 0.344482;
+        share_composite = 0.6192235;
+    elseif Multireport_budget_share=="Multireport_major_property_business"
+        share_landtransport = 0.029820;
+        share_property_business = 0.413357;
+        share_composite = 0.556823;
+    end
+end
+
 
 if  VAR_saving=="ref"
     if time_step==1 then
@@ -205,6 +223,26 @@ if  VAR_saving=="ref"
         Deriv_Exogenous.Household_saving_rate = 0.1962235;
     elseif time_step==3 then
         Deriv_Exogenous.Household_saving_rate = 0.2187141;
+    end
+end
+
+if  VAR_saving=="moderate"
+    if time_step==1 then
+        Deriv_Exogenous.Household_saving_rate = 0.1739711;
+    elseif time_step==2 then
+        Deriv_Exogenous.Household_saving_rate = 0.2138841;
+    elseif time_step==3 then
+        Deriv_Exogenous.Household_saving_rate = 0.2409163;
+    end
+end
+
+if  VAR_saving=="with_full_sufficiency"
+    if time_step==1 then
+        Deriv_Exogenous.Household_saving_rate = 0.1846744;
+    elseif time_step==2 then
+        Deriv_Exogenous.Household_saving_rate = 0.2315447;
+    elseif time_step==3 then
+        Deriv_Exogenous.Household_saving_rate = 0.2631185;
     end
 end
 
@@ -288,15 +326,6 @@ if  VAR_saving=="ref -4%"
     end
 end
 
-if  VAR_saving=="moderate"
-    if time_step==1 then
-        Deriv_Exogenous.Household_saving_rate = 0.1739711;
-    elseif time_step==2 then
-        Deriv_Exogenous.Household_saving_rate = 0.2138841;
-    elseif time_step==3 then
-        Deriv_Exogenous.Household_saving_rate = 0.2409163;
-    end
-end
 
 // if national_preference=="True"
 //     // Secteur automobile: on réduit les importations des voitures étrangères de 50% (On favorise le made in france)
