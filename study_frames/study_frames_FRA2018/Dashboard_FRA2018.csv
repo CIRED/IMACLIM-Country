@@ -8,7 +8,7 @@ ClosPubBudget;
 System_Resol;Systeme_ProjHomothetic
 Optimization_Resol;%T
 Capital_Dynamics;%F
-H_DISAGG;H10
+H_DISAGG;HH1
 Resol_Mode;Dynamic_projection
 Demographic_shift;True
 Labour_product;True
@@ -23,15 +23,15 @@ MaPrimRenov;False
 stranded_assets;False
 pY_gas_reduced_v1;False
 eq_G_ConsumpBudget;
-skip_calibration;True
+skip_calibration;false
 VAR_saving;99
 exports_drive;true
 imports_drive;true
-Macro_nb;SNBC3_run3dgt3modif
+Macro_nb;SNBC3_run3dgt3
 Proj_scenario;SNBC3_run3totalamsmixc2bis
-Nb_Iter;2
+Nb_Iter;1
 emissions_bioenergy;True
-pY_gas_reduced_v2;false
+pY_gas_reduced_v2;True
 SystemOpt_Resol;SystemOpt_Static_neokeynesienbis
 Time_step_non_etudie;999
 study;SNBC3_RunChoices3
@@ -43,7 +43,7 @@ proj_c;true
 proj_kappa;true
 proj_lambda;true
 proj_invest;true
-proj_pY;false
+proj_pY;True
 proj_spemarg_rates_IC;false
 reindustrialisation_imports_bool;false
 reindustrialisation_exports_bool;false
@@ -59,7 +59,7 @@ const_c;
 coeff_constraint;
 VAR_sigma_X;threeme
 VAR_sigma_M;threeme
-VAR_sigma_omegaU;-1.8
+VAR_sigma_omegaU;-0.1
 Coef_real_wage;1
 step;
 proj_g;true
