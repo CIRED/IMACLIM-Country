@@ -200,7 +200,7 @@ elseif Coef_real_wage=="0"
 end
 
 if SystemOpt_Resol== 'SystemOpt_Static_neokeynesien_multiReport'
-    if Multireport_budget_share=="Multireport_budget_share_ref"
+    if Multireport_budget_share=="Multireport_budget_share_ref_AMS"
         share_landtransport = 0.0314357;
         share_property_business = 0.3789194;
         share_composite = 0.5896448;
@@ -212,6 +212,14 @@ if SystemOpt_Resol== 'SystemOpt_Static_neokeynesien_multiReport'
         share_landtransport = 0.029820;
         share_property_business = 0.413357;
         share_composite = 0.556823;
+    elseif Multireport_budget_share=="Multireport_major_property_business_v2"
+        share_landtransport = 0.029520;
+        share_property_business = 0.413357;
+        share_composite = 0.557123;
+    elseif Multireport_budget_share=="proportion_report_savings_moderate"
+        share_landtransport = 0.0298200;
+        share_property_business = 0.3444819;
+        share_composite = 0.6256981;
     end
 end
 
