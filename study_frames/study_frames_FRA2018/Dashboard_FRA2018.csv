@@ -27,9 +27,9 @@ skip_calibration;True
 VAR_saving;moderate
 exports_drive;true
 imports_drive;
-Macro_nb;SNBC3_run3dgt3
+Macro_nb;SNBC3_run3dgt4
 Proj_scenario;SNBC3_run3totalamsmixc2bis
-Nb_Iter;3
+Nb_Iter;4
 emissions_bioenergy;True
 pY_gas_reduced_v2;false
 SystemOpt_Resol;SystemOpt_Static_neokeynesien_multiReport
@@ -54,7 +54,7 @@ Bonus_vehicule_dashboard;False
 VAR_sigma_CES;
 VAR_ConstrainedShare_Capital;
 VAR_sigma_KE;
-Scenario;AMSrun3mixnotebis
+Scenario;AMS2026mesures
 auto_c;
 const_c;
 coeff_constraint;
@@ -62,4 +62,4 @@ VAR_sigma_X;threeme
 VAR_sigma_M;threeme
 VAR_sigma_omegaU;-0.1
 Coef_real_wage;1
-with_sufficiency_behaviour;Construction X Chauffage X Gaspillage alimentaire X Achat vehicules neufs X Deplacements X OthEq X Electromenager X OtherManufacturedGoods
+with_sufficiency_behaviour;false
