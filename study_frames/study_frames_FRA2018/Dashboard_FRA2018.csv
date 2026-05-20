@@ -8,7 +8,7 @@ ClosPubBudget;
 System_Resol;Systeme_ProjHomothetic
 Optimization_Resol;%T
 Capital_Dynamics;%F
-H_DISAGG;HH1
+H_DISAGG;H10
 Resol_Mode;Dynamic_projection
 Demographic_shift;True
 Labour_product;True
@@ -23,7 +23,7 @@ MaPrimRenov;False
 stranded_assets;False
 pY_gas_reduced_v1;False
 eq_G_ConsumpBudget;
-skip_calibration;True
+skip_calibration;false
 VAR_saving;moderate
 exports_drive;true
 imports_drive;

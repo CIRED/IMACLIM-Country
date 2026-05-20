@@ -119,6 +119,7 @@ end
 ////////////////////////////////////////////////////////////////////////////////////
 
 // If H_DISAGG == "HH1" , on peut définir maintenant le type d'agrégation, si non il faut attendre la fin de la désagrégation des ménages
+Index_AGG_type = "";
 if H_DISAGG == "HH1"
     if AGG_type <> ""
         Index_AGG_type = find(AGG_type == Index_IOTvalue(1,:));
