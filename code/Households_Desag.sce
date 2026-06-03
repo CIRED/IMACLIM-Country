@@ -50,6 +50,8 @@ print(out,"Substep 1: DISAGGREGATION of HOUSEHOLDS...")
 // nb_HouseholdsTEMP = nb_Households;
 // else
 // lecture du ficher index, mais juste la premiere colonne
+
+// ------------ Import and process the file Index_EconData_H_DISAGG.csv -------------------
 Index_EconData_H_DISAGG = read_csv(DATA_Country+H_DISAGG+sep+"Index_EconData_"+H_DISAGG+".csv",";");
 // execstr("Index_EconData_"+H_DISAGG+"=Index_EconData_H_DISAGG"+";");
 
@@ -61,6 +63,7 @@ elt=find("Column" ==Row_Column);
 NameTemp = Row_Column(elt);
 TempIndicElt = find( NameTemp ==Index_EconData_H_DISAGG(:,1));
 
+// All the different agents of the model (Corporations, Government, restoftheworld, H1, H2, H3, H4, H5, H6, H7, H8, H9, H10 if disaggregation in 10 groups of households)
 TableTemp = Index_EconData_H_DISAGG(TempIndicElt,:);
 
 TableTemp(:,1)=[];
@@ -94,6 +97,7 @@ for elt=1:Nb_Datafiles
     end
 end
 
+// Read the .csv files and create a variable for each of them with the name of the file (without .csv)
 for elt=1:size(listCSVfiles)
     matStr = read_csv(DATA_Country+H_DISAGG+sep+listCSVfiles(elt),";");
     varname = strsubst(listCSVfiles(elt),".csv","");
@@ -250,6 +254,83 @@ value_DISAG.VA_Tax_byAgent = value_DISAG.VA_Tax_byAgent(Indice_GovernmentTEMP);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
 
 
+printf("=== LocationIndex check ===\n")
+printf("size of IOT_rate file: %d rows\n", evstr("size(IOT_rate_"+H_DISAGG+",1)"))
+printf("Number of sectors found: %d\n", size(LocationIndex, 2))
+for elt = 2:min(5, evstr("size(IOT_rate_"+H_DISAGG+",1)"))
+    ValueName = evstr("IOT_rate_"+H_DISAGG+"("+elt+",1)");
+    Location  = find("Row" == Index_IOTvalue(:,1) & ValueName == Index_IOTvalue(:,2)) - 1;
+    printf("elt=%d | ValueName=%s | Location=%d\n", elt, ValueName, Location);
+end
+
+printf("=== Full Location2 diagnosis ===\n")
+raw_find = find("Column" == Index_IOTvalue(:,1) & "C" == Index_IOTvalue(:,2));
+printf("raw find result = %d\n", raw_find)
+printf("members Row = %d\n", members("Row", Index_IOTvalue))
+printf("Location2 = raw_find - members_Row - 1 = %d - %d - 1 = %d\n", ..
+    raw_find, members("Row", Index_IOTvalue), raw_find - members("Row", Index_IOTvalue) - 1)
+
+// Print all Column entries in Index_IOTvalue
+printf("All Column entries:\n")
+col_rows = find("Column" == Index_IOTvalue(:,1));
+for i = 1:size(col_rows, 1)
+    printf("  absolute row %d | name = %s\n", col_rows(i), Index_IOTvalue(col_rows(i), 2))
+end
+
+// Also check what Index_IOTvalue looks like around the C column
+printf("Index_IOTvalue around C column:\n")
+for i = 30:40
+    if i <= size(Index_IOTvalue, 1)
+        printf("  row %d: %s | %s\n", i, Index_IOTvalue(i,1), Index_IOTvalue(i,2))
+    end
+end
+
+
+printf("===========================\n")
+
+printf("=== IOT dimensions check ===\n")
+printf("size IOT_Prices  = %d x %d\n", size(IOT_Prices, 1),  size(IOT_Prices, 2))
+printf("size IOT_Qtities = %d x %d\n", size(IOT_Qtities, 1), size(IOT_Qtities, 2))
+printf("size IOT_Val     = %d x %d\n", size(IOT_Val, 1),     size(IOT_Val, 2))
+printf("nb_Commodities = %d\n", nb_Commodities)
+printf("Location2 (C column) = %d\n", Location2)
+printf("nb_Households = %d\n", nb_Households)
+printf("============================\n")
+
+printf("=== Sectors in IOT_rate file (LocationIndex) ===\n")
+for i = 1:size(LocationIndex, 2)
+    printf("  LocationIndex(%d) = %d  (%s)\n", i, LocationIndex(i), Index_Sectors(LocationIndex(i)))
+end
+printf("================================================\n")
+
+
+disp("-------------------------------")
+
+// problematic = ["Road_diesel", "Heating_oil", "HeatGeoSol_Th", "CivilEngineering"];
+// problematic_idx = [8, 9, 11, 18];  // commodity indices in calibration
+// problematic_names = ["Cement", "OthMin", "Paper", "NavalTransp"];
+
+// for i = 1:size(problematic_idx, 2)
+//     row = find(problematic_names(i) == Index_Sectors);
+//     printf("%s | original IOT_Prices = %.4f | original IOT_Qtities C = %.4f\n", ..
+//         problematic_names(i), ..
+//         IOT_Prices(row, Location2), ..
+//         IOT_Qtities(row, Location2))
+// end
+
+printf("-------------------------------\n")
+printf("All commodities: original IOT_Prices, IOT_Qtities C and IOT_Val C\n")
+printf("-------------------------------\n")
+for i = 1:nb_Commodities
+    printf("%s | IOT_Prices = %.4f | IOT_Qtities C = %.4f | IOT_Val C = %.4f | ratio Val/Qty = %.4f\n", ..
+        Index_Sectors(i), ..
+        IOT_Prices(i, Location2), ..
+        IOT_Qtities(i, Location2), ..
+        IOT_Val(i, Location2), ..
+        IOT_Val(i, Location2) / (IOT_Qtities(i, Location2) + %eps))
+end
+printf("-------------------------------\n")
+
 //	'IOT_rate_H10.csv' is the file containing distribution keys for the disaggregation of the Input-output Table in Quantities
 
 //	Check if the file is consistent with the definition of the disaggregation
@@ -272,19 +353,30 @@ Location2 	= find( "Column" == Index_IOTvalue(:,1) & "C" == Index_IOTvalue(:,2) 
 
 LocationIndex = [];
 ValueNamesDISAG = [];
+idx = 0
 
-for elt = 2:evstr("size(IOT_rate_"+H_DISAGG+",1)")
-    ValueName 	= evstr("IOT_rate_"+H_DISAGG+"("+elt+",1)");
+for kk = 2:evstr("size(IOT_rate_"+H_DISAGG+",1)")
+    ValueName 	= evstr("IOT_rate_"+H_DISAGG+"("+kk+",1)");
 
     Location 	= find( "Row" == Index_IOTvalue(:,1) & ValueName == Index_IOTvalue(:,2) ) - 1 ;
 
+    // ADD THIS:
+    printf("kk=%d | ValueName=%s | Location=%d | size LocationIndex=%d\n", ..
+        kk, ValueName, Location, size(LocationIndex,2))
+
     if	isempty(Location)
         print(out,"IOT_rate_"+H_DISAGG+".csv does not correspond to Disaggregation type: "+ValueName+" does not appear in IOT");
-    else		
-        LocationIndex(elt-1)	= Location ;
-        ValueNamesDISAG(elt-1) 	= ValueName ; 
+    else	
+        idx = idx + 1;	
+        IOT_LocationIndex(idx)	= Location ;
+        IOT_ValueNamesDISAG(idx) 	= ValueName ; 
+        printf("  AFTER assignment: size IOT_LocationIndex=%d, IOT_LocationIndex(kk-1)=%d\n", ..
+            size(IOT_LocationIndex,2), IOT_LocationIndex(kk-1))
     end
 end
+
+printf("Final IOT_LocationIndex size = %d\n", size(IOT_LocationIndex, 2))
+
 //////////////	DISAGGREGATION - INPUT-OUTPUT TABLE in PRICES
 
 //	Location2, LocationIndex and ValueNamesDISAG do not change if the structure of the IOT matrix in price is the same than the IOT matrix in quantities and values
@@ -316,8 +408,31 @@ value_DISAG.IOT_Qtities = zeros( size(IOT_Qtities, 1), size(IOT_Qtities, 2) + nb
 value_DISAG.IOT_Qtities( : , 1:Location2-1 ) = IOT_Qtities( : , 1:Location2-1 ) ;
 value_DISAG.IOT_Qtities( : , Location2+nb_HouseholdsTEMP:$ ) = IOT_Qtities( : , Location2+1:$ ) ;
 
+// We disagregate the IOT quantities for the corresponding households
 value_DISAG.IOT_Qtities( LocationIndex , Location2:Location2+nb_HouseholdsTEMP-1 ) = Disagg_Values ;
 
+// ============================================================
+// FORCE ZERO CONSUMPTION for commodities with zero original C
+// pb_sectors have C=0 in original IOT but get phantom values
+// from disaggregation (rounding artifacts or placeholder 1s)
+// ============================================================
+pb_sectors = [];
+for i = 1:size(LocationIndex, 2)
+    row = LocationIndex(i);
+    if abs(IOT_Qtities(row, Location2)) < %eps
+        pb_sectors($+1) = row;
+        value_DISAG.IOT_Qtities(row, Location2:Location2+nb_HouseholdsTEMP-1) = zeros(1, nb_HouseholdsTEMP);
+    end
+end
+
+if ~isempty(pb_sectors)
+    printf("Forced C=0 for %d zero-consumption commodities after disaggregation:\n", size(pb_sectors,2))
+    for i = 1:size(pb_sectors, 2)
+        printf("  -> commodity %d (%s)\n", pb_sectors(i), Index_Sectors(pb_sectors(i)))
+    end
+end
+
+pause
 //////////////	DISAGGREGATION - INPUT-OUTPUT TABLE in VALUES
 
 //	Build the disaggregated IOT (Price times quantities)
@@ -335,15 +450,15 @@ value_DISAG.IOT_Val(Location3+nb_HouseholdsTEMP:$,1:nb_Commodities) = IOT_Val(Lo
 //	Energy specific margins (Same energy price, same rate of specific margins: same disaggregation of the specific margin as the energy quantities consumed)
 
 // 	Location index 2 : sectors in column
-for elt = 2:evstr("size(IOT_rate_"+H_DISAGG+",1)")
-    ValueName 	= evstr("IOT_rate_"+H_DISAGG+"(elt, 1)");
+for kk = 2:evstr("size(IOT_rate_"+H_DISAGG+",1)")
+    ValueName 	= evstr("IOT_rate_"+H_DISAGG+"(kk, 1)");
     Location 	= find( "Column" == Index_IOTvalue(:,1) & ValueName == Index_IOTvalue(:,2) ) - members("Row", Index_IOTvalue) - 1 ;
 
     if	isempty(Location)
         print(out,"IOT_rate_"+H_DISAGG+".csv does not correspond to Disaggregation type: "+ValueName+" does not appear in IOT");
     else		
-        LocationIndex2(elt-1)	= Location ;
-        ValueNamesDISAG(elt-1) 	= ValueName ; 
+        LocationIndex2(kk-1)	= Location ;
+        ValueNamesDISAG(kk-1) 	= ValueName ; 
     end
 end
 

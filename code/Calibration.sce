@@ -764,25 +764,150 @@ else
     OtherIndirTax_rate = (abs(OtherIndirTax_rate) > %eps).*OtherIndirTax_rate;
 end
 
+// ORIGINAL WRAPER 
+// function [const_VA_Tax_rate] =fcalib_VA_Tax_Const_1(x_VA_Tax_rate, VA_Tax, pC, C, pG, G, pI, I, Imaclim_VarCalib)
+//     VA_Tax_rate= indiv_x2variable(Imaclim_VarCalib, "x_VA_Tax_rate");
+//     // const_VA_Tax_rate = VA_Tax_Const_1(VA_Tax, VA_Tax_rate, pC, C, pG, G, pI, I)
+
+//     y_1 = (abs(VA_Tax)'<%eps).*VA_Tax_rate';
+//     y_2 = (abs(VA_Tax)'>%eps).*VA_Tax_Const_1(VA_Tax, abs(VA_Tax_rate), pC, C, pG, G, pI, I);
+//     const_VA_Tax_rate =(abs(VA_Tax)'<%eps).*y_1 +  (abs(VA_Tax)'>%eps).*y_2;
+
+// endfunction
+
+// SECOND WRAPER
+// function [const_VA_Tax_rate] =fcalib_VA_Tax_Const_1(x_VA_Tax_rate, VA_Tax, pC, C, pG, G, pI, I, Imaclim_VarCalib)
+//     // Use solver variable directly
+//     VA_Tax_rate = matrix(abs(x_VA_Tax_rate), -1, 1);
+
+//     VA_Tax = matrix(VA_Tax, -1, 1);
+
+//     mask_zero    = abs(VA_Tax) < %eps;
+//     mask_nonzero = abs(VA_Tax) > %eps;
+
+//     y_1 = mask_zero .* VA_Tax_rate;
+
+//     y_2 = mask_nonzero .* VA_Tax_Const_1(VA_Tax, VA_Tax_rate, pC, C, pG, G, pI, I);
+
+//     const_VA_Tax_rate = y_1 + y_2;
+
+// endfunction
+
 function [const_VA_Tax_rate] =fcalib_VA_Tax_Const_1(x_VA_Tax_rate, VA_Tax, pC, C, pG, G, pI, I, Imaclim_VarCalib)
-    VA_Tax_rate= indiv_x2variable(Imaclim_VarCalib, "x_VA_Tax_rate");
-    // const_VA_Tax_rate = VA_Tax_Const_1(VA_Tax, VA_Tax_rate, pC, C, pG, G, pI, I)
+    VA_Tax_rate = indiv_x2variable(Imaclim_VarCalib, "x_VA_Tax_rate");
+    VA_Tax_rate = VA_Tax_rate';  // force (23×1)
 
-    y_1 = (abs(VA_Tax)'<%eps).*VA_Tax_rate';
-    y_2 = (abs(VA_Tax)'>%eps).*VA_Tax_Const_1(VA_Tax, abs(VA_Tax_rate), pC, C, pG, G, pI, I);
-    const_VA_Tax_rate =(abs(VA_Tax)'<%eps).*y_1 +  (abs(VA_Tax)'>%eps).*y_2;
+    tax_base = sum(pC .* C, "c") + pG .* G + pI .* sum(I, "c");
+    mask_zero    = (abs(tax_base) < %eps);
+    mask_nonzero = ~mask_zero;
 
+    y_1 = mask_zero .* VA_Tax_rate;
+    y_2 = mask_nonzero .* VA_Tax_Const_1(VA_Tax, abs(VA_Tax_rate), pC, C, pG, G, pI, I);
+    const_VA_Tax_rate = y_1 + y_2;
 endfunction
 
 const_VA_Tax_rate = 10^5;
+
+info_calib_VA_Tax_rate = 0;  // initialize to avoid undefined variable error
+VA_Tax_total = sum(VA_Tax, "r")';  // (23×1)
+
+// Force VA_Tax to zero for commodities with no tax base at all
+tax_base_check = sum(pC .* C, "c") + pG .* G + pI .* sum(I, "c");
+
+VA_Tax_total = VA_Tax_total .* (abs(tax_base_check) > %eps);  // zero out impossible commodities
+
+// Print sum
+// Print different components of the tax base
+printf("\n============================================\n");
+printf("Tax base components by commodity\n");
+printf("============================================\n");
+
+components = list( ...
+    sum(pC .* C, "c"), ...
+    pG .* G, ...
+    pI .* sum(I, "c") ...
+);
+
+names = ["pC*C", "pG*G", "pI*I"];
+grand_total = 0;
+
+for k = 1:length(components)
+    x = components(k);
+    printf("\n%s by commodity:\n", names(k));
+
+    for i = 1:nb_Commodities
+        printf("commodity %d (%s) | %.4f\n", ...
+               i, Index_Sectors(i), x(i));
+    end
+
+    total = sum(x);
+    grand_total = grand_total + total;
+
+    printf("TOTAL %s = %.4f\n", names(k), total);
+end
+
+printf("\n--------------------------------------------\n");
+printf("GRAND TOTAL TAX BASE = %.4f\n", grand_total);
+printf("--------------------------------------------\n");
+
+// Print consumption of all commmodities in all sectors and households to check if some of them are zero (and thus should not be calibrated with the same equation)
+printf("Identify ")
+printf("\nC values per commodity per household:\n")
+for i = 1:nb_Commodities
+    printf("commodity %d (%s) | C = ", i, Index_Sectors(i))
+    for h = 1:nb_Households
+        printf("%.4f ", C(i,h))
+    end
+    printf("| sum=%.4f\n", sum(C(i,:)))
+end
+
+// print pC values to check if some of them are zero (and thus should not be calibrated with the same equation)
+printf("\npC values per commodity per household:\n")
+for i = 1:nb_Commodities
+    printf("commodity %d (%s) | pC = ", i, Index_Sectors(i))
+    for h = 1:nb_Households
+        printf("%.4f ", pC(i,h))
+    end
+    printf("\n")
+end
+
+// Print the tax base for each commodity to check if some of them are zero (and thus should not be calibrated with the same equation)
+printf("VA_Tax for zero-consumption commodities:\n")
+VA_Tax_col = matrix(VA_Tax, -1, 1);
+zero_C_commodities = [1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
+for i = 1:size(zero_C_commodities, 2)
+    idx = zero_C_commodities(i);
+    printf("commodity %d (%s) | VA_Tax=%.4f | tax_base_G=%.4f | tax_base_I=%.4f\n", ..
+        idx, Index_Sectors(idx), VA_Tax_col(idx), pG(idx)*G(idx), pI(idx)*sum(I(idx,:)))
+end
+
+disp(info_calib_VA_Tax_rate, "info fsolve")
+disp(norm(const_VA_Tax_rate), "norm residual")
+
 while norm(const_VA_Tax_rate) > sensib
     if  (count>=countMax)
+        // Print which residuals are large before erroring
+        printf("Non-converged residuals:\n")
+        for i = 1:nb_Commodities
+            if abs(const_VA_Tax_rate(i)) > sensib
+                printf("  commodity %d (%s) | residual=%.4f | VA_Tax_total=%.4f | tax_base=%.4f\n", ..
+                    i, Index_Sectors(i), const_VA_Tax_rate(i), VA_Tax_total(i), tax_base_check(i))
+            end
+        end
         error("review calib_VA_Tax_rate")
     end
     count = count + 1;
-    [x_VA_Tax_rate, const_VA_Tax_rate, info_calib_VA_Tax_rate] = fsolve(x_VA_Tax_rate, list(fcalib_VA_Tax_Const_1,VA_Tax, pC, C, pG, G, pI,I,Index_Imaclim_VarCalib));
-    VA_Tax_rate = abs(indiv_x2variable (Index_Imaclim_VarCalib, "x_VA_Tax_rate"));
-    VA_Tax_rate = (abs(VA_Tax_rate) > %eps).*VA_Tax_rate;
+    // OLD VERSION
+    // [x_VA_Tax_rate, const_VA_Tax_rate, info_calib_VA_Tax_rate] = fsolve(x_VA_Tax_rate, list(fcalib_VA_Tax_Const_1,VA_Tax, pC, C, pG, G, pI,I,Index_Imaclim_VarCalib));
+    // VA_Tax_rate = abs(indiv_x2variable (Index_Imaclim_VarCalib, "x_VA_Tax_rate"));
+    // VA_Tax_rate = (abs(VA_Tax_rate) > %eps).*VA_Tax_rate;
+    [x_VA_Tax_rate, const_VA_Tax_rate, info_calib_VA_Tax_rate] = fsolve(x_VA_Tax_rate, list(fcalib_VA_Tax_Const_1, VA_Tax_total, pC, C, pG, G, pI, I, Index_Imaclim_VarCalib));
+    VA_Tax_rate = abs(indiv_x2variable(Index_Imaclim_VarCalib, "x_VA_Tax_rate"));
+    VA_Tax_rate = (abs(VA_Tax_rate) > %eps) .* VA_Tax_rate;
+    x_VA_Tax_rate = VA_Tax_rate';
+    disp(count, norm(const_VA_Tax_rate), "count / residual norm")
+
+
 
 end
 count=0;
@@ -898,9 +1023,9 @@ end
 // function [const_SpeMarg] =fcalib_SpeMarg_Const_1(x_SpeMarg, SpeMarg_rates_IC, SpeMarg_rates_C,SpeMarg_rates_X, SpeMarg_rates_I, p, alpha, Y, C, X, Imaclim_VarCalib)
 
 // x_SpeMarg_IC = x_SpeMarg (1: nb_Sectors*nb_Commodities);
-// x_SpeMarg_C = x_SpeMarg(nb_Sectors*nb_Commodities+1 : nb_Sectors*nb_Commodities + nb_Households*nb_Commodities);
-// x_SpeMarg_X = x_SpeMarg(nb_Sectors*nb_Commodities + nb_Households*nb_Commodities+1 : nb_Sectors*nb_Commodities + nb_Households*nb_Commodities + nb_Commodities);
-// x_SpeMarg_I = x_SpeMarg(nb_Sectors*nb_Commodities+ nb_Households*nb_Commodities + nb_Commodities+1 : nb_Sectors*nb_Commodities+ nb_Households*nb_Commodities+ nb_Commodities+nb_Commodities);
+// x_SpeMarg_C = x_SpeMarg(nb_Sectors*nb_Commodities+1 : nb_Sectors*nb_Commodities + nb_households_d*nb_Commodities);
+// x_SpeMarg_X = x_SpeMarg(nb_Sectors*nb_Commodities + nb_households_desag*nb_Commodities+1 : nb_Sectors*nb_Commodities + nb_households_desag.sce*nb_Commodities + nb_Commodities);
+// x_SpeMarg_I = x_SpeMarg(nb_Sectors*nb_Commodities+ nb_households_desag.sce*nb_Commodities + nb_Commodities+1 : nb_Sectors*nb_Commodities+ nb_households_desag.sce*nb_Commodities+ nb_Commodities+nb_Commodities);
 
 // SpeMarg_IC= indiv_x2variable(Imaclim_VarCalib, 'x_SpeMarg_IC');
 // SpeMarg_C= indiv_x2variable(Imaclim_VarCalib, 'x_SpeMarg_C');

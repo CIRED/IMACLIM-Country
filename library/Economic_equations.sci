@@ -1302,7 +1302,53 @@ endfunction
 
 /// Value Added Tax (by product-sector)
 
-function y = VA_Tax_Const_1(VA_Tax, VA_Tax_rate, pC, C, pG, G, pI, I);
+function y = VA_Tax_Const_1(VA_Tax, VA_Tax_rate, pC, C, pG, G, pI, I)
+
+    tax_base_C = sum(pC .* C, "c");   // (23×1) - will be 0 for zero-C commodities
+    tax_base_G = pG .* G;              // (23×1)
+    tax_base_I = pI .* sum(I, "c");   // (23×1)
+    tax_base = tax_base_C + tax_base_G + tax_base_I;
+
+    // if tax_base = 0 => impossible to calibrate rate, force residual to 0
+    mask_zero = (abs(tax_base) < %eps);
+    mask_nonzero = ~mask_zero;
+
+    y_zero    = mask_zero .* VA_Tax_rate;  // drives rate to 0 where no tax base
+    y_nonzero = mask_nonzero .* (VA_Tax - (VA_Tax_rate ./ (1 + VA_Tax_rate)) .* tax_base);
+    y = y_zero + y_nonzero;
+
+endfunction
+
+// function y = VA_Tax_Const_1(VA_Tax, VA_Tax_rate, pC, C, pG, G, pI, I);
+
+
+//     // Force all vectors to column vectors
+//     VA_Tax      = matrix(VA_Tax, size(VA_Tax, "*"), 1);
+//     VA_Tax_rate = matrix(VA_Tax_rate, size(VA_Tax_rate, "*"), 1);
+
+//     pG = matrix(pG, size(pG, "*"), 1);
+//     G  = matrix(G , size(G , "*"), 1);
+
+//     pI = matrix(pI, size(pI, "*"), 1);
+
+//     C_base = matrix(sum(pC .* C, "c"), size(pC,1), 1);
+//     I_base = matrix(sum(I, "c"), size(I,1), 1);
+
+//     tax_base = C_base + pG .* G + pI .* I_base;
+
+//     tax_rate_factor = VA_Tax_rate ./ (1 + VA_Tax_rate);
+
+//     test_rate = VA_Tax ./ (tax_base - VA_Tax);
+
+//     disp(min(tax_base - VA_Tax), "min denominator")
+//     disp(max(tax_base - VA_Tax), "max denominator")
+//     disp(test_rate)
+
+//     y = VA_Tax - tax_rate_factor .* tax_base;
+
+// endfunction
+
+function y = VA_Tax_Const_1_version_gaelle(VA_Tax, VA_Tax_rate, pC, C, pG, G, pI, I);
 
     // Same rate for all items of domestic final demand
     y = VA_Tax' - ( (VA_Tax_rate' ./ (1 + VA_Tax_rate')) .* (sum( pC .* C, "c") + sum(pG .* G, "c") + pI .* sum(I, "c")) ) ;
