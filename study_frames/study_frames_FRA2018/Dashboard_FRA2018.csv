@@ -8,7 +8,7 @@ ClosPubBudget;
 System_Resol;Systeme_ProjHomothetic
 Optimization_Resol;%T
 Capital_Dynamics;%F
-H_DISAGG;HH1
+H_DISAGG;H10
 Resol_Mode;Dynamic_projection
 Demographic_shift;True
 Labour_product;True
@@ -29,7 +29,7 @@ exports_drive;true
 imports_drive;
 Macro_nb;SNBC3_run3dgt4
 Proj_scenario;SNBC3_run3totalamsmixc2bis
-Nb_Iter;4
+Nb_Iter;1
 emissions_bioenergy;True
 pY_gas_reduced_v2;false
 SystemOpt_Resol;SystemOpt_Static_neokeynesien_multiReport
@@ -40,7 +40,7 @@ AGG_type;AGG_23TME
 proj_alpha;true
 proj_imports;false
 proj_exports;false
-proj_c;true
+proj_c;false
 proj_kappa;true
 proj_lambda;true
 proj_invest;false
