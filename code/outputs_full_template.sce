@@ -72,7 +72,7 @@ OutputTable("FullTemplate_"+ref_name)=[["Variables",    "values_"+Name_time];..
 ["FC_Government", sum(Out.G_value)/1000];..
 // 1 HOUSEHOLD ["FC_Households_1", sum(Out.C_value)/1000];..
 // we print the 10 Households and the average
-["FC_Households_Avg", mean(sum(Out.C_value, "r")/1000)];..
+["FC_Households_total", sum(Out.C_value)/1000];..
 ["FC_Household_"+Index_HouseholdsTEMP, (sum(Out.C_value,"r")/1000)'];..  
 
 ["FC_"+Index_InstitAgents,    money_disp_adj.*Out.FC_byAgent'];..
@@ -575,7 +575,7 @@ OutputTable("FullTemplate_"+ref_name)=[["Variables",    "values_"+Name_time];..
 
 ["sum(Out.pC.*Out.C)",  sum(Out.pC.*Out.C) ];..
 // 1 HOUSEHOLD - ["H_disposable_income",  Out.H_disposable_income ];..
-["H_disposable_income",  mean(Out.H_disposable_income) ];..
+["H_disposable_income",  sum(Out.H_disposable_income) ];..
 ["H_disposable_income_"+Index_HouseholdsTEMP,  H_disposable_income'];..
 
 ["pY_w"+Index_EnerSect,  Out.pY(Indice_EnerSect) ./ Out.w'(Indice_EnerSect)];..
@@ -592,37 +592,37 @@ OutputTable("FullTemplate_"+ref_name)=[["Variables",    "values_"+Name_time];..
 ["VAR_sigma_M",    VAR_sigma_M];..
 ["VAR_sigma_omegaU",    VAR_sigma_omegaU];..
 // 1 HOUSEHOLD["H_Labour_Income",    Out.NetCompWages_byAgent(Indice_Households)];..
-["H_Labour_Income",  mean(Out.NetCompWages_byAgent(Indice_Households)) ];..
+["H_Labour_Income",  sum(Out.NetCompWages_byAgent(Indice_Households)) ];..
 ["H_Labour_Income_"+Index_HouseholdsTEMP,  NetCompWages_byAgent(Indice_Households)'];..
 // Resuls for one household
 // ["H_Non_Labour_Income",    Out.GOS_byAgent(Indice_Households)];..
-["H_Non_Labour_Income",  mean(Out.GOS_byAgent(Indice_Households)) ];..
+["H_Non_Labour_Income",  sum(Out.GOS_byAgent(Indice_Households)) ];..
 ["H_Non_Labour_Income_"+Index_HouseholdsTEMP,  Out.GOS_byAgent(Indice_Households)'];..
 // ["H_Social_Transfers",    Out.Pensions(Indice_Households) + Out.Unemployment_transfers(Indice_Households) + Out.Other_social_transfers(Indice_Households)];..
-["H_Social_Transfers",  mean(Out.Pensions(Indice_Households) + Out.Unemployment_transfers(Indice_Households) + Out.Other_social_transfers(Indice_Households)) ];..
+["H_Social_Transfers",  sum(Out.Pensions(Indice_Households) + Out.Unemployment_transfers(Indice_Households) + Out.Other_social_transfers(Indice_Households)) ];..
 ["H_Social_Transfers_"+Index_HouseholdsTEMP, (Out.Pensions(Indice_Households) + Out.Unemployment_transfers(Indice_Households) + Out.Other_social_transfers(Indice_Households))'];..
 // ["H_Social_Transfers_pensions",    Out.Pensions(Indice_Households)];..
-["H_Social_Transfers_pensions",  mean(Out.Pensions(Indice_Households)) ];..
+["H_Social_Transfers_pensions",  sum(Out.Pensions(Indice_Households)) ];..
 ["H_Social_Transfers_pensions_"+Index_HouseholdsTEMP,  Out.Pensions(Indice_Households)'];..
 
 // ["H_Social_Transfers_unemploy",     Out.Unemployment_transfers(Indice_Households)];..
-["H_Social_Transfers_unemploy",  mean(Out.Unemployment_transfers(Indice_Households)) ];..
+["H_Social_Transfers_unemploy",  sum(Out.Unemployment_transfers(Indice_Households)) ];..
 ["H_Social_Transfers_unemploy_"+Index_HouseholdsTEMP,  Out.Unemployment_transfers(Indice_Households)'];..
 
 // ["H_Social_Transfers_other",     Out.Other_social_transfers(Indice_Households)];..
-["H_Social_Transfers_other",  mean(Out.Other_social_transfers(Indice_Households)) ];..
+["H_Social_Transfers_other",  sum(Out.Other_social_transfers(Indice_Households)) ];..
 ["H_Social_Transfers_other_"+Index_HouseholdsTEMP,  Out.Other_social_transfers(Indice_Households)'];..
 
 // ["H_Other_Income",    Out.Other_Transfers(Indice_Households) + Out.ClimPolicyCompens(Indice_Households)];..
-["H_Other_Income",  mean(Out.Other_Transfers(Indice_Households) + Out.ClimPolicyCompens(Indice_Households)) ];..
+["H_Other_Income",  sum(Out.Other_Transfers(Indice_Households) + Out.ClimPolicyCompens(Indice_Households)) ];..
 ["H_Other_Income_"+Index_HouseholdsTEMP,  (Out.Other_Transfers(Indice_Households) + Out.ClimPolicyCompens(Indice_Households))'];..
 
 // ["H_Property_income",    Out.Property_income(Indice_Households)];..
-["H_Property_income",  mean(Out.Property_income(Indice_Households)) ];..
+["H_Property_income",  sum(Out.Property_income(Indice_Households)) ];..
 ["H_Property_income_"+Index_HouseholdsTEMP,  Out.Property_income(Indice_Households)'];..
 
 // ["H_Tax_Payments",    Out.Income_Tax(Indice_Households) + Out.Other_Direct_Tax(Indice_Households)];
-["H_Tax_Payments",  mean(Out.Income_Tax(Indice_Households) + Out.Other_Direct_Tax(Indice_Households)) ];..
+["H_Tax_Payments",  sum(Out.Income_Tax(Indice_Households) + Out.Other_Direct_Tax(Indice_Households)) ];..
 ["H_Tax_Payments_"+Index_HouseholdsTEMP,  (Out.Income_Tax(Indice_Households) + Out.Other_Direct_Tax(Indice_Households))'];..
 
 ["sigma_wage_curve",     VAR_sigma_omegaU];
