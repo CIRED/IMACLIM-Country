@@ -199,6 +199,9 @@ elseif Coef_real_wage=="0"
     parameters.Coef_real_wage = 0;
 end
 
+// ------------ MULTI-REPORT SCENARIO: THE EXTRA SAVINGS ARE REPORTED IN DIFFERENT SECTORS ------------
+// In this scenario, we suppose that a part of the saving made with behaviour change is reported in three different sectors (land transport, property and business services, composite) according to the shares defined below. 
+//The rest of the saving is not consummed and lead to an increase of the saving rate of the households
 if SystemOpt_Resol== 'SystemOpt_Static_neokeynesien_multiReport'
     if Multireport_budget_share=="Multireport_budget_share_ref_AMS"
         share_landtransport = 0.0314357;
@@ -223,7 +226,8 @@ if SystemOpt_Resol== 'SystemOpt_Static_neokeynesien_multiReport'
     end
 end
 
-
+// ------------ Force the consumption of the households throught the savings ------------
+// Here we force the consumption of the households throught the savings rate. The saving rate is defined as the ratio of consumption to disposable income. By modifiying saving rate, we force the consumption 
 if  VAR_saving=="ref"
     if time_step==1 then
         Deriv_Exogenous.Household_saving_rate = 0.1632678;
@@ -254,85 +258,86 @@ if  VAR_saving=="with_full_sufficiency"
     end
 end
 
-if  VAR_saving=="ref +1%"
-    if time_step==1 then
-        Deriv_Exogenous.Household_saving_rate = 0.1632678 + 0.01;
-    elseif time_step==2 then
-        Deriv_Exogenous.Household_saving_rate = 0.1962235 + 0.01;
-    elseif time_step==3 then
-        Deriv_Exogenous.Household_saving_rate = 0.2187141 + 0.01;
-    end
-end
+// TO DELETE 
+// if  VAR_saving=="ref +1%"
+//     if time_step==1 then
+//         Deriv_Exogenous.Household_saving_rate = 0.1632678 + 0.01;
+//     elseif time_step==2 then
+//         Deriv_Exogenous.Household_saving_rate = 0.1962235 + 0.01;
+//     elseif time_step==3 then
+//         Deriv_Exogenous.Household_saving_rate = 0.2187141 + 0.01;
+//     end
+// end
 
-if  VAR_saving=="ref +2%"
-    if time_step==1 then
-        Deriv_Exogenous.Household_saving_rate = 0.1632678 + 0.02;
-    elseif time_step==2 then
-        Deriv_Exogenous.Household_saving_rate = 0.1962235 + 0.02;
-    elseif time_step==3 then
-        Deriv_Exogenous.Household_saving_rate = 0.2187141 + 0.02;
-    end
-end
+// if  VAR_saving=="ref +2%"
+//     if time_step==1 then
+//         Deriv_Exogenous.Household_saving_rate = 0.1632678 + 0.02;
+//     elseif time_step==2 then
+//         Deriv_Exogenous.Household_saving_rate = 0.1962235 + 0.02;
+//     elseif time_step==3 then
+//         Deriv_Exogenous.Household_saving_rate = 0.2187141 + 0.02;
+//     end
+// end
 
-if  VAR_saving=="ref +3%"
-    if time_step==1 then
-        Deriv_Exogenous.Household_saving_rate = 0.1632678 + 0.03;
-    elseif time_step==2 then
-        Deriv_Exogenous.Household_saving_rate = 0.1962235 + 0.03;
-    elseif time_step==3 then
-        Deriv_Exogenous.Household_saving_rate = 0.2187141 + 0.03;
-    end
-end
+// if  VAR_saving=="ref +3%"
+//     if time_step==1 then
+//         Deriv_Exogenous.Household_saving_rate = 0.1632678 + 0.03;
+//     elseif time_step==2 then
+//         Deriv_Exogenous.Household_saving_rate = 0.1962235 + 0.03;
+//     elseif time_step==3 then
+//         Deriv_Exogenous.Household_saving_rate = 0.2187141 + 0.03;
+//     end
+// end
 
-if  VAR_saving=="ref +4%"
-    if time_step==1 then
-        Deriv_Exogenous.Household_saving_rate = 0.1632678 + 0.04;
-    elseif time_step==2 then
-        Deriv_Exogenous.Household_saving_rate = 0.1962235 + 0.04;
-    elseif time_step==3 then
-        Deriv_Exogenous.Household_saving_rate = 0.2187141 + 0.04;
-    end
-end
+// if  VAR_saving=="ref +4%"
+//     if time_step==1 then
+//         Deriv_Exogenous.Household_saving_rate = 0.1632678 + 0.04;
+//     elseif time_step==2 then
+//         Deriv_Exogenous.Household_saving_rate = 0.1962235 + 0.04;
+//     elseif time_step==3 then
+//         Deriv_Exogenous.Household_saving_rate = 0.2187141 + 0.04;
+//     end
+// end
 
-if  VAR_saving=="ref -1%"
-    if time_step==1 then
-        Deriv_Exogenous.Household_saving_rate = 0.1632678 - 0.01;
-    elseif time_step==2 then
-        Deriv_Exogenous.Household_saving_rate = 0.1962235 - 0.01;
-    elseif time_step==3 then
-        Deriv_Exogenous.Household_saving_rate = 0.2187141 - 0.01;
-    end
-end
+// if  VAR_saving=="ref -1%"
+//     if time_step==1 then
+//         Deriv_Exogenous.Household_saving_rate = 0.1632678 - 0.01;
+//     elseif time_step==2 then
+//         Deriv_Exogenous.Household_saving_rate = 0.1962235 - 0.01;
+//     elseif time_step==3 then
+//         Deriv_Exogenous.Household_saving_rate = 0.2187141 - 0.01;
+//     end
+// end
 
-if  VAR_saving=="ref -2%"
-    if time_step==1 then
-        Deriv_Exogenous.Household_saving_rate = 0.1632678 - 0.02;
-    elseif time_step==2 then
-        Deriv_Exogenous.Household_saving_rate = 0.1962235 - 0.02;
-    elseif time_step==3 then
-        Deriv_Exogenous.Household_saving_rate = 0.2187141 - 0.02;
-    end
-end
+// if  VAR_saving=="ref -2%"
+//     if time_step==1 then
+//         Deriv_Exogenous.Household_saving_rate = 0.1632678 - 0.02;
+//     elseif time_step==2 then
+//         Deriv_Exogenous.Household_saving_rate = 0.1962235 - 0.02;
+//     elseif time_step==3 then
+//         Deriv_Exogenous.Household_saving_rate = 0.2187141 - 0.02;
+//     end
+// end
 
-if  VAR_saving=="ref -3%"
-    if time_step==1 then
-        Deriv_Exogenous.Household_saving_rate = 0.1632678 - 0.03;
-    elseif time_step==2 then
-        Deriv_Exogenous.Household_saving_rate = 0.1962235 - 0.03;
-    elseif time_step==3 then
-        Deriv_Exogenous.Household_saving_rate = 0.2187141 - 0.03;
-    end
-end
+// if  VAR_saving=="ref -3%"
+//     if time_step==1 then
+//         Deriv_Exogenous.Household_saving_rate = 0.1632678 - 0.03;
+//     elseif time_step==2 then
+//         Deriv_Exogenous.Household_saving_rate = 0.1962235 - 0.03;
+//     elseif time_step==3 then
+//         Deriv_Exogenous.Household_saving_rate = 0.2187141 - 0.03;
+//     end
+// end
 
-if  VAR_saving=="ref -4%"
-    if time_step==1 then
-        Deriv_Exogenous.Household_saving_rate = 0.1632678 - 0.04;
-    elseif time_step==2 then
-        Deriv_Exogenous.Household_saving_rate = 0.1962235 - 0.04;
-    elseif time_step==3 then
-        Deriv_Exogenous.Household_saving_rate = 0.2187141 - 0.04;
-    end
-end
+// if  VAR_saving=="ref -4%"
+//     if time_step==1 then
+//         Deriv_Exogenous.Household_saving_rate = 0.1632678 - 0.04;
+//     elseif time_step==2 then
+//         Deriv_Exogenous.Household_saving_rate = 0.1962235 - 0.04;
+//     elseif time_step==3 then
+//         Deriv_Exogenous.Household_saving_rate = 0.2187141 - 0.04;
+//     end
+// end
 
 
 // if national_preference=="True"
@@ -344,6 +349,25 @@ end
 //     Proj_Vol.M.val(12) = Proj_Vol.M.val(12);
 // end
 
+if time_step==4
+    if Scenario=="AMS2026mesures_h10" 
+        if with_sufficiency_behaviour=="test_sufficiency_h10"
+            disp("test Mathieu")
+            // choc déplacement
+            Proj_Vol.C.val(2, 10) = Proj_Vol.C.val(2, 10)*0.5;
+
+            // Choc auto 
+            Proj_Vol.C.val(12, 10) = Proj_Vol.C.val(12, 10)*0.5;
+
+            // Choc construction
+            Proj_Vol.C.val(21, 10) = Proj_Vol.C.val(21, 10)*0.5;
+
+        end
+    end
+end
+
+//#################################### Premier tests de choc de sobriété #####################################
+// In that scenario we reduce exogenously the consumption of the households 
 if time_step==1
     if Scenario=="AMSrun3mixnote" | Scenario=="AMSrun3mixnotebis"
         if with_sufficiency_behaviour=="Construction X Chauffage X Gaspillage alimentaire X Achat vehicules neufs X Deplacements X OthEq X Electromenager X OtherManufacturedGoods"

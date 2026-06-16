@@ -68,12 +68,12 @@ OutputTable("FullTemplate_"+ref_name)=[["Variables",    "values_"+Name_time];..
 ["Nominal VA-"+Index_Sectors,    money_disp_adj.*sum(Out.Value_Added,"r")'];..
 ["Nominal GDP-"+Index_Sectors,    money_disp_adj.*sum(Out.GDP_sect,"r")'];..
 ["GFCF_"+Index_DomesticAgents,    money_disp_adj.*Out.GFCF_byAgent(Indice_DomesticAgents)'];..
-// ["Disposable income_"+Index_InstitAgents,    money_disp_adj.*Out.Disposable_Income'];..
+["Disposable income_"+Index_InstitAgents,    money_disp_adj.*Out.Disposable_Income'];..
 ["FC_Government", sum(Out.G_value)/1000];..
 // 1 HOUSEHOLD ["FC_Households_1", sum(Out.C_value)/1000];..
 // we print the 10 Households and the average
 ["FC_Households_total", sum(Out.C_value)/1000];..
-["FC_Household_"+Index_HouseholdsTEMP, (sum(Out.C_value,"r")/1000)'];..  
+["FC_"+Index_HouseholdsTEMP, (sum(Out.C_value,"r")/1000)'];..  
 
 ["FC_"+Index_InstitAgents,    money_disp_adj.*Out.FC_byAgent'];..
 ["Net Lending_"+Index_InstitAgents,    money_disp_adj.*Out.NetLending'];..

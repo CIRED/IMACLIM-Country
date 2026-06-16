@@ -617,8 +617,7 @@ function y = H_demand_Const_2_Multireport(Consumption_budget, C, ConstrainedShar
     
     // TOCLEAN
 	//// Warning code: assuming that the last sector in the matrix is the composite one 
-    y1(1:nb_Sectors-1, :) = C(1:nb_Sectors-1, :) - (1+delta_C_parameter(1:nb_Sectors-1)').^time_since_BY.*.(ones(1,nb_Households)).* .. 
-(ConstrainedShare_C(1:nb_Sectors-1, :) .* BY.C(1:nb_Sectors-1, :) + (1 - ConstrainedShare_C(1:nb_Sectors-1, :)) .* BY.C(1:nb_Sectors-1, :) .* ( (pC(1:nb_Sectors-1, :)/CPI) ./ (BY.pC(1:nb_Sectors-1, :)/BY.CPI) ).^ sigma_pC(1:nb_Sectors-1, :) .* (( ((Consumption_budget.*.ones(nb_Sectors-1, 1))./CPI) ./ ((BY.Consumption_budget.*.ones(nb_Sectors-1, 1))./BY.CPI) ) .^ sigma_ConsoBudget(1:nb_Sectors-1, :) ) );
+    y1(1:nb_Sectors-1, :) = C(1:nb_Sectors-1, :) - (1+delta_C_parameter(1:nb_Sectors-1)').^time_since_BY.*.(ones(1,nb_Households)).* (ConstrainedShare_C(1:nb_Sectors-1, :) .* BY.C(1:nb_Sectors-1, :) + (1 - ConstrainedShare_C(1:nb_Sectors-1, :)) .* BY.C(1:nb_Sectors-1, :) .* ( (pC(1:nb_Sectors-1, :)/CPI) ./ (BY.pC(1:nb_Sectors-1, :)/BY.CPI) ).^ sigma_pC(1:nb_Sectors-1, :) .* (( ((Consumption_budget.*.ones(nb_Sectors-1, 1))./CPI) ./ ((BY.Consumption_budget.*.ones(nb_Sectors-1, 1))./BY.CPI) ) .^ sigma_ConsoBudget(1:nb_Sectors-1, :) ) );
 
 	/// Replace C by the one that are informed if so
     if is_projected('C') then
