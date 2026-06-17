@@ -8,7 +8,7 @@ ClosPubBudget;
 System_Resol;Systeme_ProjHomothetic
 Optimization_Resol;%T
 Capital_Dynamics;%F
-H_DISAGG;H10
+H_DISAGG;HH1
 Resol_Mode;Dynamic_projection
 Demographic_shift;True
 Labour_product;True
@@ -29,7 +29,7 @@ exports_drive;true
 imports_drive;
 Macro_nb;SNBC3_run3dgt4
 Proj_scenario;SNBC3_run3totalamsmixc2bis
-Nb_Iter;4
+Nb_Iter;1
 emissions_bioenergy;True
 pY_gas_reduced_v2;false
 SystemOpt_Resol;SystemOpt_Static_neokeynesien
@@ -54,7 +54,7 @@ Bonus_vehicule_dashboard;False
 VAR_sigma_CES;
 VAR_ConstrainedShare_Capital;
 VAR_sigma_KE;
-Scenario;AMS2026mesures_h10
+Scenario;AMS2026mesures
 auto_c;
 const_c;
 coeff_constraint;
