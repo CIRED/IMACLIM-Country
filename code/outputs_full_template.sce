@@ -149,6 +149,7 @@ OutputTable("FullTemplate_"+ref_name)=[["Variables",    "values_"+Name_time];..
 ["Nominal GDP-"+Index_Sectors,    money_disp_adj.*sum(Out.GDP_sect,"r")'];..
 ["GFCF_"+Index_DomesticAgents,    money_disp_adj.*Out.GFCF_byAgent(Indice_DomesticAgents)'];..
 ["Disposable income_"+Index_InstitAgents,    money_disp_adj.*Out.Disposable_Income'];..
+["Disposable income_Households", sum(money_disp_adj.*Out.Disposable_Income(Indice_Households))];..
 ["FC_Government", sum(Out.G_value)/1000];..
 FC_Households_lines;
 // 1 HOUSEHOLD ["FC_Households_1", sum(Out.C_value)/1000];..
@@ -159,6 +160,7 @@ FC_Households_lines;
 
 ["FC_"+Index_InstitAgents,    money_disp_adj.*Out.FC_byAgent'];..
 ["Net Lending_"+Index_InstitAgents,    money_disp_adj.*Out.NetLending'];..
+["Net Lending_Households", sum(money_disp_adj.*Out.NetLending(Indice_Households))];..
 ["Country Deficit/GDP-ratio/"+ref_name,    evol_ref.NetLendingRoW_GDP];..
 ["Net Debt"+Index_InstitAgents,    money_disp_adj.*Out.NetFinancialDebt'];..
 // 1 HOUSEHOLD ["HH saving - % ",	 (sum(Out.Household_savings)/sum(Out.H_disposable_income))];..

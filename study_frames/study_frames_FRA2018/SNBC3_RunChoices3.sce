@@ -349,7 +349,21 @@ end
 //     Proj_Vol.M.val(12) = Proj_Vol.M.val(12);
 // end
 
+// test 
 if time_step==4
+    if Scenario=="AMS2026mesures" 
+        if with_sufficiency_behaviour=="test_sufficiency"
+            // choc déplacement
+            Proj_Vol.C.val(2) = Proj_Vol.C.val(2)*0.5;
+
+            // Choc auto 
+            Proj_Vol.C.val(12) = Proj_Vol.C.val(12)*0.5;
+
+            // Choc construction
+            Proj_Vol.C.val(21) = Proj_Vol.C.val(21)*0.5;
+
+        end
+    end
     if Scenario=="AMS2026mesures_h10" 
         if with_sufficiency_behaviour=="test_sufficiency_h10"
             disp("test Mathieu")
