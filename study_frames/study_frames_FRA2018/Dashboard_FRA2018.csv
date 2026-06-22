@@ -8,7 +8,7 @@ ClosPubBudget;
 System_Resol;Systeme_ProjHomothetic
 Optimization_Resol;%T
 Capital_Dynamics;%F
-H_DISAGG;H10
+H_DISAGG;HH1
 Resol_Mode;Dynamic_projection
 Demographic_shift;True
 Labour_product;True
@@ -53,13 +53,13 @@ Bonus_vehicule_dashboard;False
 VAR_sigma_CES;
 VAR_ConstrainedShare_Capital;
 VAR_sigma_KE;
-Scenario;AME2026
+Scenario;AMS2026mesures
 auto_c;
 const_c;
 coeff_constraint;
 VAR_sigma_X;threeme
 VAR_sigma_M;threeme
-VAR_sigma_omegaU;-1.8
+VAR_sigma_omegaU;-0.1
 Coef_real_wage;1
 step;
 proj_g;true
