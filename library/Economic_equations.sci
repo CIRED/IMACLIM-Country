@@ -350,6 +350,14 @@ function y = H_NetLending_Const_1(NetLending, GFCF_byAgent, Household_savings) ;
 	y=y1';		
 endfunction
 
+function y = H_NetLending_Const_2(NetLending, H_disposable_income, pC, C, GFCF_byAgent) ;
+
+    /// Household net lending constraint (NetLending)
+    y1 = NetLending(Indice_Households) - (H_disposable_income - sum(pC.*C) -  GFCF_byAgent(Indice_Households)) ;
+
+    y=y1';      
+endfunction
+
 
 // Household net financial position: stock of debt (+) / liabilities (-) (by household class)
 // Counter-part of past accumulated net lending / net borrowing

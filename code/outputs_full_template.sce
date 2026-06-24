@@ -150,6 +150,7 @@ OutputTable("FullTemplate_"+ref_name)=[["Variables",    "values_"+Name_time];..
 ["GFCF_"+Index_DomesticAgents,    money_disp_adj.*Out.GFCF_byAgent(Indice_DomesticAgents)'];..
 ["Disposable income_"+Index_InstitAgents,    money_disp_adj.*Out.Disposable_Income'];..
 ["Disposable income_Households", sum(money_disp_adj.*Out.Disposable_Income(Indice_Households))];..
+["Gini index (Disposable income)", (1 - 2 * sum(cumsum(H_disposable_income) / sum(H_disposable_income)) / length(H_disposable_income))];..
 ["FC_Government", sum(Out.G_value)/1000];..
 FC_Households_lines;
 // 1 HOUSEHOLD ["FC_Households_1", sum(Out.C_value)/1000];..

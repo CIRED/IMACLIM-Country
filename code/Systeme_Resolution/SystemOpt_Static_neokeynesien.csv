@@ -53,7 +53,7 @@ Household_savings;H_Savings_Val_2;H_disposable_income, Household_saving_rate;
 Consumption_budget;ConsumBudget_Val_1;H_disposable_income, Household_saving_rate;// 1 : share o disposable income / 2 : constant in real term
 ;H_Investment_Const_1;GFCF_byAgent, H_disposable_income, H_Invest_propensity;// Contribution à la FBCF des ménages : 1-part constante du revenu / 2-proportionnellement à la consommation finale en biens immobilier
 //;H_Investment_Const_2;GFCF_byAgent,pC,C;
-;H_NetLending_Const_1;NetLending, GFCF_byAgent, Household_savings;
+;H_NetLending_Const_2;NetLending, H_disposable_income, pC, C, GFCF_byAgent;
 ;H_PropTranf_Const_2;Property_income, GDP;// const_1 as interest of Debt / const_2 indexation on GDP (except RoW balanced to have sum = 0)
 ;H_NetDebt_Const_4;NetFinancialDebt, NetLending, Property_income, time_since_BY, time_since_ini;// Const_1 : Linear growth of Debts from ini / Const_2 : equal to BY
 ;;;

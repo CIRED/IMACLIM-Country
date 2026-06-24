@@ -29,7 +29,7 @@ exports_drive;true
 imports_drive;
 Macro_nb;SNBC3_run3dgt4
 Proj_scenario;SNBC3_run3totalamsmixc2bis
-Nb_Iter;4
+Nb_Iter;1
 emissions_bioenergy;True
 pY_gas_reduced_v2;false
 SystemOpt_Resol;SystemOpt_Static_neokeynesien
