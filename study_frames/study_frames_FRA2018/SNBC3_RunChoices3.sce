@@ -199,35 +199,10 @@ elseif Coef_real_wage=="0"
     parameters.Coef_real_wage = 0;
 end
 
-// ------------ MULTI-REPORT SCENARIO: THE EXTRA SAVINGS ARE REPORTED IN DIFFERENT SECTORS ------------
-// In this scenario, we suppose that a part of the saving made with behaviour change is reported in three different sectors (land transport, property and business services, composite) according to the shares defined below. 
-//The rest of the saving is not consummed and lead to an increase of the saving rate of the households
-if SystemOpt_Resol== 'SystemOpt_Static_neokeynesien_multiReport'
-    if Multireport_budget_share=="Multireport_budget_share_ref_AMS"
-        share_landtransport = 0.0314357;
-        share_property_business = 0.3789194;
-        share_composite = 0.5896448;
-    elseif Multireport_budget_share=="Multireport_major_landTransport"
-        share_landtransport = 0.036283;
-        share_property_business = 0.344482;
-        share_composite = 0.6192235;
-    elseif Multireport_budget_share=="Multireport_major_property_business"
-        share_landtransport = 0.029820;
-        share_property_business = 0.413357;
-        share_composite = 0.556823;
-    elseif Multireport_budget_share=="Multireport_major_property_business_v2"
-        share_landtransport = 0.029520;
-        share_property_business = 0.413357;
-        share_composite = 0.557123;
-    elseif Multireport_budget_share=="proportion_report_savings_moderate"
-        share_landtransport = 0.0298200;
-        share_property_business = 0.3444819;
-        share_composite = 0.6256981;
-    end
-end
+//////////////////////////////////////////////////// Saving rate  //////////////////////////////////////////////////////////////////////
+// Here we try to force the consumption of the households throught the savings rate. The saving rate is defined as the ratio of consumption to disposable income. 
+// By modifiying saving rate, we force the consumption
 
-// ------------ Force the consumption of the households throught the savings ------------
-// Here we force the consumption of the households throught the savings rate. The saving rate is defined as the ratio of consumption to disposable income. By modifiying saving rate, we force the consumption 
 if  VAR_saving=="ref"
     if time_step==1 then
         Deriv_Exogenous.Household_saving_rate = 0.1632678;
@@ -279,66 +254,6 @@ end
 //     end
 // end
 
-// if  VAR_saving=="ref +3%"
-//     if time_step==1 then
-//         Deriv_Exogenous.Household_saving_rate = 0.1632678 + 0.03;
-//     elseif time_step==2 then
-//         Deriv_Exogenous.Household_saving_rate = 0.1962235 + 0.03;
-//     elseif time_step==3 then
-//         Deriv_Exogenous.Household_saving_rate = 0.2187141 + 0.03;
-//     end
-// end
-
-// if  VAR_saving=="ref +4%"
-//     if time_step==1 then
-//         Deriv_Exogenous.Household_saving_rate = 0.1632678 + 0.04;
-//     elseif time_step==2 then
-//         Deriv_Exogenous.Household_saving_rate = 0.1962235 + 0.04;
-//     elseif time_step==3 then
-//         Deriv_Exogenous.Household_saving_rate = 0.2187141 + 0.04;
-//     end
-// end
-
-// if  VAR_saving=="ref -1%"
-//     if time_step==1 then
-//         Deriv_Exogenous.Household_saving_rate = 0.1632678 - 0.01;
-//     elseif time_step==2 then
-//         Deriv_Exogenous.Household_saving_rate = 0.1962235 - 0.01;
-//     elseif time_step==3 then
-//         Deriv_Exogenous.Household_saving_rate = 0.2187141 - 0.01;
-//     end
-// end
-
-// if  VAR_saving=="ref -2%"
-//     if time_step==1 then
-//         Deriv_Exogenous.Household_saving_rate = 0.1632678 - 0.02;
-//     elseif time_step==2 then
-//         Deriv_Exogenous.Household_saving_rate = 0.1962235 - 0.02;
-//     elseif time_step==3 then
-//         Deriv_Exogenous.Household_saving_rate = 0.2187141 - 0.02;
-//     end
-// end
-
-// if  VAR_saving=="ref -3%"
-//     if time_step==1 then
-//         Deriv_Exogenous.Household_saving_rate = 0.1632678 - 0.03;
-//     elseif time_step==2 then
-//         Deriv_Exogenous.Household_saving_rate = 0.1962235 - 0.03;
-//     elseif time_step==3 then
-//         Deriv_Exogenous.Household_saving_rate = 0.2187141 - 0.03;
-//     end
-// end
-
-// if  VAR_saving=="ref -4%"
-//     if time_step==1 then
-//         Deriv_Exogenous.Household_saving_rate = 0.1632678 - 0.04;
-//     elseif time_step==2 then
-//         Deriv_Exogenous.Household_saving_rate = 0.1962235 - 0.04;
-//     elseif time_step==3 then
-//         Deriv_Exogenous.Household_saving_rate = 0.2187141 - 0.04;
-//     end
-// end
-
 
 // if national_preference=="True"
 //     // Secteur automobile: on réduit les importations des voitures étrangères de 50% (On favorise le made in france)
@@ -349,7 +264,39 @@ end
 //     Proj_Vol.M.val(12) = Proj_Vol.M.val(12);
 // end
 
-// test 
+//////////////////////////////////////// MULTI-REPORT SCENARIO: THE EXTRA SAVINGS ARE REPORTED IN DIFFERENT SECTORS  //////////////////////////////////////////////////////////////////////
+// In this scenario, we suppose that a part of the saving made with behaviour change is reported in three different sectors (land transport, property and business services, composite) according to the shares defined below. 
+//The rest of the saving is not consummed and lead to an increase of the saving rate of the households
+
+if SystemOpt_Resol== 'SystemOpt_Static_neokeynesien_multiReport'
+    if Multireport_budget_share=="Multireport_budget_share_ref_AMS"
+        share_landtransport = 0.0314357;
+        share_property_business = 0.3789194;
+        share_composite = 0.5896448;
+    elseif Multireport_budget_share=="Multireport_major_landTransport"
+        share_landtransport = 0.036283;
+        share_property_business = 0.344482;
+        share_composite = 0.6192235;
+    elseif Multireport_budget_share=="Multireport_major_property_business"
+        share_landtransport = 0.029820;
+        share_property_business = 0.413357;
+        share_composite = 0.556823;
+    elseif Multireport_budget_share=="Multireport_major_property_business_v2"
+        share_landtransport = 0.029520;
+        share_property_business = 0.413357;
+        share_composite = 0.557123;
+    elseif Multireport_budget_share=="proportion_report_savings_moderate"
+        share_landtransport = 0.0298200;
+        share_property_business = 0.3444819;
+        share_composite = 0.6256981;
+    end
+end
+
+
+
+
+//////////////////////////////////////////////////// TEST  //////////////////////////////////////////////////////////////////////
+
 if time_step==4
     if Scenario=="AMS2026mesures" 
         if with_sufficiency_behaviour=="test_sufficiency"
@@ -380,8 +327,77 @@ if time_step==4
     end
 end
 
-//#################################### Premier tests de choc de sobriété #####################################
-// In that scenario we reduce exogenously the consumption of the households 
+
+//////////////////////////////////////////////////// SECOND SUFFICIENCY CHOC FOR 10 HOUSEHOLDS  //////////////////////////////////////////////////////////////////////
+// In that scenario we reduce exogenously the consumption of 6 highest households. We suppose that the consumption of 6 highest households in 2050 is equal to the consumption of the household D4 in the different sector studied
+// The reduction of consumption by household is defined in the 'HH_consumption_reduction' in the folder AMS2026mesures_h10
+
+// Reduction de la consommation des ménages en 2030
+if time_step==1
+    if Scenario=="AMS2026mesures_h10"
+        // Case where all the consumptions of H5-H10 is equal to the consumption of H4
+        if with_sufficiency_behaviour == "Consumption of H4 for H5-H6 in 2050"
+            Proj_Vol.C.val = Proj_Vol.C.val .* (1 + HH_consumption_reduction_1);
+        end
+
+        // This scenario is an equivalent choc of the scenario "Consumption of H4 for H5-H6 in 2050" but homogenously distributed among all households
+        if with_sufficiency_behaviour == "Choc of H4 homogenously distributed"
+            Proj_Vol.C.val = Proj_Vol.C.val .* (1 + HH_consumption_homogenous_reduction_1);
+        end
+    end
+end
+
+// Reduction de la consommation des ménages  en 2035
+if time_step==2
+    if Scenario=="AMS2026mesures_h10"
+        // Case where all the consumptions of H5-H10 is equal to the consumption of H4
+        if with_sufficiency_behaviour == "Consumption of H4 for H5-H6 in 2050"
+            Proj_Vol.C.val = Proj_Vol.C.val .* (1 + HH_consumption_reduction_2);
+        end
+    
+        // This scenario is an equivalent choc of the scenario "Consumption of H4 for H5-H6 in 2050" but homogenously distributed among all households
+        if with_sufficiency_behaviour == "Choc of H4 homogenously distributed"
+            Proj_Vol.C.val = Proj_Vol.C.val .* (1 + HH_consumption_homogenous_reduction_2);
+        end
+    end
+end
+
+// Reduction de la consommation des ménages en 2040
+if time_step==3
+    if Scenario=="AMS2026mesures_h10"
+        if with_sufficiency_behaviour == "Consumption of H4 for H5-H6 in 2050"
+            Proj_Vol.C.val = Proj_Vol.C.val .* (1 + HH_consumption_reduction_3);
+        end
+
+        // This scenario is an equivalent choc of the scenario "Consumption of H4 for H5-H6 in 2050" but homogenously distributed among all households
+        if with_sufficiency_behaviour == "Choc of H4 homogenously distributed"
+            Proj_Vol.C.val = Proj_Vol.C.val .* (1 + HH_consumption_homogenous_reduction_3);
+        end
+    end
+end
+
+// Reduction de la consommation des ménages en 2050
+if time_step==4
+    if Scenario=="AMS2026mesures_h10"
+        if with_sufficiency_behaviour == "Consumption of H4 for H5-H6 in 2050"
+            Proj_Vol.C.val = Proj_Vol.C.val .* (1 + HH_consumption_reduction_4);
+        end
+
+        // This scenario is an equivalent choc of the scenario "Consumption of H4 for H5-H6 in 2050" but homogenously distributed among all households
+        if with_sufficiency_behaviour == "Choc of H4 homogenously distributed"
+            Proj_Vol.C.val = Proj_Vol.C.val .* (1 + HH_consumption_homogenous_reduction_4);
+        end
+    end
+end
+
+
+
+
+
+
+//////////////////////////////////////////////////// First sufficiency choc  //////////////////////////////////////////////////////////////////////
+// In that scenario we reduce exogenously the consumption of the households based on the hypothesis of the sufficiency scenario S1 of ADEME
+
 if time_step==1
     if Scenario=="AMSrun3mixnote" | Scenario=="AMSrun3mixnotebis"
         if with_sufficiency_behaviour=="Construction X Chauffage X Gaspillage alimentaire X Achat vehicules neufs X Deplacements X OthEq X Electromenager X OtherManufacturedGoods"

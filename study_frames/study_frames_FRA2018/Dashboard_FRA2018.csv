@@ -29,7 +29,7 @@ exports_drive;true
 imports_drive;
 Macro_nb;SNBC3_run3dgt4
 Proj_scenario;SNBC3_run3totalamsmixc2bis
-Nb_Iter;1
+Nb_Iter;4
 emissions_bioenergy;True
 pY_gas_reduced_v2;false
 SystemOpt_Resol;SystemOpt_Static_neokeynesien
@@ -62,4 +62,4 @@ VAR_sigma_X;threeme
 VAR_sigma_M;threemes
 VAR_sigma_omegaU;-0.1
 Coef_real_wage;1
-with_sufficiency_behaviour;test_sufficiency_h10
+with_sufficiency_behaviour;Choc of H4 homogenously distributed
