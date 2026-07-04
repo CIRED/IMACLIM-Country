@@ -66,7 +66,7 @@ if  imports_drive=='true'
 	parameters.delta_M_parameter(1:2) = delta_M_file(1:2,time_step)';
     parameters.delta_M_parameter(4:4) = delta_M_file(4:4,time_step)';
     //parameters.delta_M_parameter(6:20) = delta_M_file(6:20,time_step)';
-    parameters.delta_M_parameter(22:23) = delta_M_file(22:23,time_step)';
+    //parameters.delta_M_parameter(22:23) = delta_M_file(22:23,time_step)';
 
 end
 
