@@ -62,4 +62,4 @@ VAR_sigma_X;threeme
 VAR_sigma_M;threemes
 VAR_sigma_omegaU;-0.1
 Coef_real_wage;1
-with_sufficiency_behaviour;Choc of H4 homogenously distributed
+with_sufficiency_behaviour;False

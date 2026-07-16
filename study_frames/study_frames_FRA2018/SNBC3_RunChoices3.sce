@@ -295,38 +295,6 @@ end
 
 
 
-//////////////////////////////////////////////////// TEST  //////////////////////////////////////////////////////////////////////
-
-if time_step==4
-    if Scenario=="AMS2026mesures" 
-        if with_sufficiency_behaviour=="test_sufficiency"
-            // choc déplacement
-            Proj_Vol.C.val(2) = Proj_Vol.C.val(2)*0.5;
-
-            // Choc auto 
-            Proj_Vol.C.val(12) = Proj_Vol.C.val(12)*0.5;
-
-            // Choc construction
-            Proj_Vol.C.val(21) = Proj_Vol.C.val(21)*0.5;
-
-        end
-    end
-    if Scenario=="AMS2026mesures_h10" 
-        if with_sufficiency_behaviour=="test_sufficiency_h10"
-            disp("test Mathieu")
-            // choc déplacement
-            Proj_Vol.C.val(2, 10) = Proj_Vol.C.val(2, 10)*0.5;
-
-            // Choc auto 
-            Proj_Vol.C.val(12, 10) = Proj_Vol.C.val(12, 10)*0.5;
-
-            // Choc construction
-            Proj_Vol.C.val(21, 10) = Proj_Vol.C.val(21, 10)*0.5;
-
-        end
-    end
-end
-
 
 //////////////////////////////////////////////////// SECOND SUFFICIENCY CHOC FOR 10 HOUSEHOLDS  //////////////////////////////////////////////////////////////////////
 // In that scenario we reduce exogenously the consumption of 6 highest households. We suppose that the consumption of 6 highest households in 2050 is equal to the consumption of the household D4 in the different sector studied

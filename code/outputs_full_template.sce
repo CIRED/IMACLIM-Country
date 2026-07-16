@@ -33,6 +33,13 @@
 ////// knowledge of the CeCILL license and that you accept its terms.
 //////////////////////////////////////////////////////////////////////////////////
 
+/// For equity - efficacity
+if nb_Households <> 1 & [Country == "France"]
+	// We compute the primary income of households (before taxes and transfers)
+	Out.H_Primary_income = Out.H_disposable_income - Out.Other_Direct_Tax(Indice_Households) - Out.Income_Tax(Indice_Households);
+end
+
+
 //Difference between households 
 // Different print if it is a simple households (if C_value(2)==1) or if there is more than a single households (if C_value(2)>1)
 if size(Out.C_value,2) > 1 then
@@ -47,7 +54,7 @@ if size(Out.C_value,2) > 1 then
 		["HH saving_"+Index_HouseholdsTEMP, (Household_savings ./H_disposable_income)'];
 	];
 	HH_Induced_saving_rate_Households = [
-		["Induced saving rate",  1 - sum(Out.pC.*Out.C, "r") /Out.H_disposable_income];..
+		["Induced saving rate",  1 - sum(sum(Out.pC.*Out.C, "r")) / sum(Out.H_disposable_income)];..
 		["Induced saving rate_"+Index_HouseholdsTEMP, (1 - (sum(Out.pC.*Out.C, "r") ./ Out.H_disposable_income))'];
 	]
 	// Population
@@ -150,7 +157,12 @@ OutputTable("FullTemplate_"+ref_name)=[["Variables",    "values_"+Name_time];..
 ["GFCF_"+Index_DomesticAgents,    money_disp_adj.*Out.GFCF_byAgent(Indice_DomesticAgents)'];..
 ["Disposable income_"+Index_InstitAgents,    money_disp_adj.*Out.Disposable_Income'];..
 ["Disposable income_Households", sum(money_disp_adj.*Out.Disposable_Income(Indice_Households))];..
-["Gini index (Disposable income)", (1 - 2 * sum(cumsum(H_disposable_income) / sum(H_disposable_income)) / length(H_disposable_income))];..
+//["Gini index (Disposable income)", (1 - 2 * sum(cumsum(H_disposable_income) / sum(H_disposable_income)) / length(H_disposable_income) + 1 / length(H_disposable_income))];..
+
+// Gini Index
+["Gini index", Gini_indicator_bis(sum(Out.C_value,"r")./HH_pFish,Out.Population)];..
+["Gini index (on Gross primary income)", Gini_indicator_bis(Out.H_Primary_income,Out.Population)];..
+["Gini index (on Gross disposable income)", Gini_indicator_bis(Out.H_disposable_income,Out.Population)];..
 ["FC_Government", sum(Out.G_value)/1000];..
 FC_Households_lines;
 // 1 HOUSEHOLD ["FC_Households_1", sum(Out.C_value)/1000];..
