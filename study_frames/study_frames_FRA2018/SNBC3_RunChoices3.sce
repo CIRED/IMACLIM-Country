@@ -367,137 +367,190 @@ end
 // In that scenario we reduce exogenously the consumption of the households based on the hypothesis of the sufficiency scenario S1 of ADEME
 
 if time_step==1
-    if Scenario=="AMSrun3mixnote" | Scenario=="AMSrun3mixnotebis"
-        if with_sufficiency_behaviour=="Construction X Chauffage X Gaspillage alimentaire X Achat vehicules neufs X Deplacements X OthEq X Electromenager X OtherManufacturedGoods"
+    if Scenario=="AMSrun3mixnote" | Scenario=="AMSrun3mixnotebis" | Scenario=="AMS2026mesures_h10"
+        if with_sufficiency_behaviour=="Sufficiency Choc S1"
+            ///// CHOCS ENERGETIQUES ////////
+            // Oil consumption: -72% de la consommation du transport (22 % consommation oil est issue des logements /78 % des transports) et -3% dans le logement
+            Proj_Vol.C.val(2,:) = Proj_Vol.C.val(2,:)*0.22*(1-0.03*12/32) + Proj_Vol.C.val(2,:)*0.78*(1-0.72*12/32);
 
-            ////// 1 - Choc Construction durable et Zéro artificialisation nette ////////
-            // Construction: -50% de la construction neuve avec la zero artificialisation des sols
-            Proj_Vol.C.val(21) = Proj_Vol.C.val(21)*(1-0.5*12/32);
+            // Gas consumption: -3% de la consommation du logement (100 % consommation gaz issue du logement)
+            Proj_Vol.C.val(3,:) = Proj_Vol.C.val(3,:)*(1-0.03*12/32);
 
-            ///// 2 - Choc consommation énergétique des ménages sur le logement ////////
-            // Oil consumption: -5% de la consommation du logement (22 % consommation oil est issue des logements /78 % des transports)  
-            // Proj_Vol.C.val(2) = Proj_Vol.C.val(2)*0.22*0.95 + Proj_Vol.C.val(2)*0.78*1;
+            // Coal consumption: -3% de la consommation du logement (100 % de la consommation du charbon est issue du logement)
+            Proj_Vol.C.val(4,:) = Proj_Vol.C.val(4,:)*(1-0.03*12/32);
 
-            // Gas consumption: -5% de la consommation du logement (100 % consommation gaz issue du logement)
-            Proj_Vol.C.val(3) = Proj_Vol.C.val(3)*(1-0.05*12/32);
+            // Electricity consumption: -3% de la consommation du logement (94% de la consommation électricité issue du logement) + -72% de la consommation du transport (6% de la consommation d'electricité pour le transport)
+            Proj_Vol.C.val(5,:) = Proj_Vol.C.val(5,:)*0.94*(1-0.03*12/32) + Proj_Vol.C.val(5,:)*0.06*(1-0.72*12/32);
 
-            // Coal consumption: -5% de la consommation du logement (100 % de la consommation du charbon est issue du logement)
-            Proj_Vol.C.val(4) = Proj_Vol.C.val(4)*(1-0.05*12/32);
+            ///// CHOC VEHICULES NEUFS ////////
+            // Secteur automobile: -54% d’achats de véhicules neufs 
+            Proj_Vol.C.val(12,:) = Proj_Vol.C.val(12,:)*(1-0.54*12/32);
 
-            // Electricity consumption: -5% de la consommation du logement (100% de la consommation électricité issue du logement)
-            Proj_Vol.C.val(5) = Proj_Vol.C.val(5)*(1-0.05*12/32);
+            ///// CHOC BIENS MANUFACTURES ////////
+            // Secteur OthEq: -10% de consommation TV, ordi, smartphone
+            Proj_Vol.C.val(13,:) = Proj_Vol.C.val(13,:)*(1-0.1*12/32);
 
+            // Secteur Electroménager: -66% de consommation électroménager
+            Proj_Vol.C.val(14,:) = Proj_Vol.C.val(14,:)*(1-0.66*12/32);
+            
+            ///// CHOC ALIMENTATION /////
+            // Alimentation: -11% car on réduit fortement le gaspillage alimentaire
+            Proj_Vol.C.val(15,:) = Proj_Vol.C.val(15,:)*(1-0.11*12/32);
 
-            ///// 3 - Choc Alimentation et Gaspillage alimentaire /////
-            // Alimentation: -20% car on réduit fortement le gaspillage alimentaire
-            Proj_Vol.C.val(15) = Proj_Vol.C.val(15)*(1-0.2*12/32);
+            // Secteur OtherManufacturedGoods: -9% de consommation de vêtements, autres biens manufacturés,...
+            Proj_Vol.C.val(16,:) = Proj_Vol.C.val(16,:)*(1-0.09*12/32);
 
-            // Agriculture: -20% de la production agricole du à la réduction du gaspillage alimentaire
-            Proj_Vol.C.val(20) = Proj_Vol.C.val(20)*(1-0.2*12/32);
+            ///// CHOC TRANSPORT /////
+            // Secteur LandTransport: -12% des déplacements en bus et train
+            Proj_Vol.C.val(17,:) = Proj_Vol.C.val(17,:)*(1-0.12*12/32);
 
+            // Secteur AirTransport: -79% de la consommation de transport aérien
+            Proj_Vol.C.val(19,:) = Proj_Vol.C.val(19,:)*(1-0.79*12/32);
 
-            ///// 4 - Choc véhicules neufs////////
-            // Secteur automobile: -50% d’achats de véhicules neufs 
-            Proj_Vol.C.val(12) = Proj_Vol.C.val(12)*(1-0.5*12/32);
+            // Agriculture: -3% de la production agricole du à la réduction du gaspillage alimentaire
+            Proj_Vol.C.val(20,:) = Proj_Vol.C.val(20,:)*(1-0.03*12/32);
 
-            ///// 5 - Choc consommation transport + chauffage logement ////////
-            // Oil consumption: -50% de la consommation du transport (22 % consommation oil est issue des logements /78 % des transports) et -5% dans le logement
-            Proj_Vol.C.val(2) = Proj_Vol.C.val(2)*0.22*(1-0.05*12/32) + Proj_Vol.C.val(2)*0.78*(1-0.5*12/32);
+            //////  CHOC CONSTRUCTION ////////
+            // Construction: -51% de la construction neuve avec la zero artificialisation des sols
+            Proj_Vol.C.val(21,:) = Proj_Vol.C.val(21,:)*(1-0.51*12/32);
 
-
-            ///// 6 - Choc consommation de biens manufacturés ////////
-            // Secteur OthEq: -20% de consommation TV, ordi, smartphone
-            Proj_Vol.C.val(13) = Proj_Vol.C.val(13)*(1-0.2*12/32);
-
-            // Secteur Electroménager: -20% de consommation électroménager
-            Proj_Vol.C.val(14) = Proj_Vol.C.val(14)*(1-0.2*12/32);
-
-            // Secteur OtherManufacturedGoods: -20% de consommation de vêtements, autres biens manufacturés,...
-            Proj_Vol.C.val(16) = Proj_Vol.C.val(16)*(1-0.2*12/32);
         end
     end
 end
 
-        
 
 if time_step==2
-    if Scenario=="AMSrun3mixnote" | Scenario=="AMSrun3mixnotebis"
-        if with_sufficiency_behaviour=="Construction X Chauffage X Gaspillage alimentaire X Achat vehicules neufs X Deplacements X OthEq X Electromenager X OtherManufacturedGoods"
+    if Scenario=="AMSrun3mixnote" | Scenario=="AMSrun3mixnotebis" | Scenario=="AMS2026mesures_h10"
+        if with_sufficiency_behaviour=="Sufficiency Choc S1"
+            ///// CHOCS ENERGETIQUES ////////
+            // Oil consumption: -72% de la consommation du transport (22 % consommation oil est issue des logements /78 % des transports) et -3% dans le logement
+            Proj_Vol.C.val(2,:) = Proj_Vol.C.val(2,:)*0.22*(1-0.03*17/32) + Proj_Vol.C.val(2,:)*0.78*(1-0.72*17/32);
 
-            ////// 1 - Choc Construction durable et Zéro artificialisation nette ////////
-            // Construction: -50% de la construction neuve avec la zero artificialisation des sols
-            Proj_Vol.C.val(21) = Proj_Vol.C.val(21)*(1-0.5*22/32);
+            // Gas consumption: -3% de la consommation du logement (100 % consommation gaz issue du logement)
+            Proj_Vol.C.val(3,:) = Proj_Vol.C.val(3,:)*(1-0.03*17/32);
 
-            ///// 2 - Choc consommation énergétique des ménages sur le logement ////////
-            // Oil consumption: -5% de la consommation du logement (22 % consommation oil est issue des logements /78 % des transports)  
-            // Proj_Vol.C.val(2) = Proj_Vol.C.val(2)*0.22*0.95 + Proj_Vol.C.val(2)*0.78*1;
+            // Coal consumption: -3% de la consommation du logement (100 % de la consommation du charbon est issue du logement)
+            Proj_Vol.C.val(4,:) = Proj_Vol.C.val(4,:)*(1-0.03*17/32);
 
-            // Gas consumption: -5% de la consommation du logement (100 % consommation gaz issue du logement)
-            Proj_Vol.C.val(3) = Proj_Vol.C.val(3)*(1-0.05*22/32);
+            // Electricity consumption: -3% de la consommation du logement (94% de la consommation électricité issue du logement) + -72% de la consommation du transport (6% de la consommation d'electricité pour le transport)
+            Proj_Vol.C.val(5,:) = Proj_Vol.C.val(5,:)*0.94*(1-0.03*17/32) + Proj_Vol.C.val(5,:)*0.06*(1-0.72*17/32);
 
-            // Coal consumption: -5% de la consommation du logement (100 % de la consommation du charbon est issue du logement)
-            Proj_Vol.C.val(4) = Proj_Vol.C.val(4)*(1-0.05*22/32);
+            ///// CHOC VEHICULES NEUFS ////////
+            // Secteur automobile: -54% d’achats de véhicules neufs 
+            Proj_Vol.C.val(12,:) = Proj_Vol.C.val(12,:)*(1-0.54*17/32);
 
-            // Electricity consumption: -5% de la consommation du logement (100% de la consommation électricité issue du logement)
-            Proj_Vol.C.val(5) = Proj_Vol.C.val(5)*(1-0.05*22/32);
+            ///// CHOC BIENS MANUFACTURES ////////
+            // Secteur OthEq: -10% de consommation TV, ordi, smartphone
+            Proj_Vol.C.val(13,:) = Proj_Vol.C.val(13,:)*(1-0.1*17/32);
 
+            // Secteur Electroménager: -66% de consommation électroménager
+            Proj_Vol.C.val(14,:) = Proj_Vol.C.val(14,:)*(1-0.66*17/32);
+            
+            ///// CHOC ALIMENTATION /////
+            // Alimentation: -11% car on réduit fortement le gaspillage alimentaire
+            Proj_Vol.C.val(15,:) = Proj_Vol.C.val(15,:)*(1-0.11*17/32);
 
-            ///// 3 - Choc Alimentation et Gaspillage alimentaire /////
-            // Alimentation: -20% car on réduit fortement le gaspillage alimentaire
-            Proj_Vol.C.val(15) = Proj_Vol.C.val(15)*(1-0.2*22/32);
+            // Secteur OtherManufacturedGoods: -9% de consommation de vêtements, autres biens manufacturés,...
+            Proj_Vol.C.val(16,:) = Proj_Vol.C.val(16,:)*(1-0.09*17/32);
 
-            // Agriculture: -20% de la production agricole du à la réduction du gaspillage alimentaire
-            Proj_Vol.C.val(20) = Proj_Vol.C.val(20)*(1-0.2*22/32);
+            ///// CHOC TRANSPORT /////
+            // Secteur LandTransport: -12% des déplacements en bus et train
+            Proj_Vol.C.val(17,:) = Proj_Vol.C.val(17,:)*(1-0.12*17/32);
 
+            // Secteur AirTransport: -79% de la consommation de transport aérien
+            Proj_Vol.C.val(19,:) = Proj_Vol.C.val(19,:)*(1-0.79*17/32);
 
-            ///// 4 - Choc véhicules neufs////////
-            // Secteur automobile: -50% d’achats de véhicules neufs 
-            Proj_Vol.C.val(12) = Proj_Vol.C.val(12)*(1-0.5*22/32);
+            // Agriculture: -3% de la production agricole du à la réduction du gaspillage alimentaire
+            Proj_Vol.C.val(20,:) = Proj_Vol.C.val(20,:)*(1-0.03*17/32);
 
-            ///// 5 - Choc consommation transport + chauffage logement ////////
-            // Oil consumption: -50% de la consommation du transport (22 % consommation oil est issue des logements /78 % des transports) et -5% dans le logement
-            Proj_Vol.C.val(2) = Proj_Vol.C.val(2)*0.22*(1-0.05*22/32) + Proj_Vol.C.val(2)*0.78*(1-0.5*22/32);
+            //////  CHOC CONSTRUCTION ////////
+            // Construction: -51% de la construction neuve avec la zero artificialisation des sols
+            Proj_Vol.C.val(21,:) = Proj_Vol.C.val(21,:)*(1-0.51*17/32);
 
+        end
+    end
+end
+        
 
-            ///// 6 - Choc consommation de biens manufacturés ////////
-            // Secteur OthEq: -20% de consommation TV, ordi, smartphone
-            Proj_Vol.C.val(13) = Proj_Vol.C.val(13)*(1-0.2*22/32);
+if time_step==3
+    if Scenario=="AMSrun3mixnote" | Scenario=="AMSrun3mixnotebis" | Scenario=="AMS2026mesures_h10"
+        if with_sufficiency_behaviour=="Sufficiency Choc S1"
 
-            // Secteur Electroménager: -20% de consommation électroménager
-            Proj_Vol.C.val(14) = Proj_Vol.C.val(14)*(1-0.2*22/32);
+            ///// CHOCS ENERGETIQUES ////////
+            // Oil consumption: -72% de la consommation du transport (22 % consommation oil est issue des logements /78 % des transports) et -3% dans le logement
+            Proj_Vol.C.val(2,:) = Proj_Vol.C.val(2,:)*0.22*(1-0.03*22/32) + Proj_Vol.C.val(2,:)*0.78*(1-0.72*22/32);
 
-            // Secteur OtherManufacturedGoods: -20% de consommation de vêtements, autres biens manufacturés,...
-            Proj_Vol.C.val(16) = Proj_Vol.C.val(16)*(1-0.2*22/32);
+            // Gas consumption: -3% de la consommation du logement (100 % consommation gaz issue du logement)
+            Proj_Vol.C.val(3,:) = Proj_Vol.C.val(3,:)*(1-0.03*22/32);
+
+            // Coal consumption: -3% de la consommation du logement (100 % de la consommation du charbon est issue du logement)
+            Proj_Vol.C.val(4,:) = Proj_Vol.C.val(4,:)*(1-0.03*22/32);
+
+            // Electricity consumption: -3% de la consommation du logement (83% de la consommation électricité issue du logement) + -72% de la consommation du transport (17% de la consommation d'electricité pour le transport)
+            Proj_Vol.C.val(5,:) = Proj_Vol.C.val(5,:)*0.83*(1-0.03*22/32) + Proj_Vol.C.val(5,:)*0.17*(1-0.72*22/32);
+
+            ///// CHOC VEHICULES NEUFS ////////
+            // Secteur automobile: -54% d’achats de véhicules neufs 
+            Proj_Vol.C.val(12,:) = Proj_Vol.C.val(12,:)*(1-0.54*22/32);
+
+            ///// CHOC BIENS MANUFACTURES ////////
+            // Secteur OthEq: -10% de consommation TV, ordi, smartphone
+            Proj_Vol.C.val(13,:) = Proj_Vol.C.val(13,:)*(1-0.1*22/32);
+
+            // Secteur Electroménager: -66% de consommation électroménager
+            Proj_Vol.C.val(14,:) = Proj_Vol.C.val(14,:)*(1-0.66*22/32);
+            
+            ///// CHOC ALIMENTATION /////
+            // Alimentation: -11% car on réduit fortement le gaspillage alimentaire
+            Proj_Vol.C.val(15,:) = Proj_Vol.C.val(15,:)*(1-0.11*22/32);
+
+            // Secteur OtherManufacturedGoods: -9% de consommation de vêtements, autres biens manufacturés,...
+            Proj_Vol.C.val(16,:) = Proj_Vol.C.val(16,:)*(1-0.09*22/32);
+
+            ///// CHOC TRANSPORT /////
+            // Secteur LandTransport: -12% des déplacements en bus et train
+            Proj_Vol.C.val(17,:) = Proj_Vol.C.val(17,:)*(1-0.12*22/32);
+
+            // Secteur AirTransport: -79% de la consommation de transport aérien
+            Proj_Vol.C.val(19,:) = Proj_Vol.C.val(19,:)*(1-0.79*22/32);
+
+            // Agriculture: -3% de la production agricole du à la réduction du gaspillage alimentaire
+            Proj_Vol.C.val(20,:) = Proj_Vol.C.val(20,:)*(1-0.03*22/32);
+
+            //////  CHOC CONSTRUCTION ////////
+            // Construction: -51% de la construction neuve avec la zero artificialisation des sols
+            Proj_Vol.C.val(21,:) = Proj_Vol.C.val(21,:)*(1-0.51*22/32);
+
         end
     end
 end
 
-if time_step==3
-    if Scenario=="AMSrun3mixnote" | Scenario=="AMSrun3mixnotebis"
+if time_step==4
+    if Scenario=="AMSrun3mixnote" | Scenario=="AMSrun3mixnotebis" | Scenario=="AMS2026mesures_h10"
         if with_sufficiency_behaviour=="Construction"
             ////// 1 - Choc Construction durable et Zéro artificialisation nette ////////
             // Construction: -50% de la construction neuve avec la zero artificialisation des sols
             // Proj_Vol.C.val(21) = Proj_Vol.C.val(21)*0.5;
-            Proj_Vol.C.val(21) = Proj_Vol.C.val(21)*0.9;
+            Proj_Vol.C.val(21,:) = Proj_Vol.C.val(21,:)*0.9;
 
 
         elseif with_sufficiency_behaviour=="Chauffage"
             ///// 2 - Choc consommation énergétique des ménages sur le logement ////////
             // Oil consumption: -5% de la consommation du logement (22 % consommation oil est issue des logements /78 % des transports)  
             // Proj_Vol.C.val(2) = Proj_Vol.C.val(2)*0.22*0.95 + Proj_Vol.C.val(2)*0.78*1;
-            Proj_Vol.C.val(2) = Proj_Vol.C.val(2)*0.22*0.9 + Proj_Vol.C.val(2)*0.78*1;
+            Proj_Vol.C.val(2,:) = Proj_Vol.C.val(2,:)*0.22*0.9 + Proj_Vol.C.val(2,:)*0.78*1;
 
             // Gas consumption: -5% de la consommation du logement (100 % consommation gaz issue du logement)
             // Proj_Vol.C.val(3) = Proj_Vol.C.val(3)*0.95;
-            Proj_Vol.C.val(3) = Proj_Vol.C.val(3)*0.9;
+            Proj_Vol.C.val(3,:) = Proj_Vol.C.val(3,:)*0.9;
 
             // Coal consumption: -5% de la consommation du logement (100 % de la consommation du charbon est issue du logement)
             // Proj_Vol.C.val(4) = Proj_Vol.C.val(4)*0.95;
-            Proj_Vol.C.val(4) = Proj_Vol.C.val(4)*0.9;
+            Proj_Vol.C.val(4,:) = Proj_Vol.C.val(4,:)*0.9;
 
             // Electricity consumption: -5% de la consommation du logement (100% de la consommation électricité issue du logement)
             // Proj_Vol.C.val(5) = Proj_Vol.C.val(5)*0.95;
-            Proj_Vol.C.val(5) = Proj_Vol.C.val(5)*0.9;
+            Proj_Vol.C.val(5,:) = Proj_Vol.C.val(5,:)*0.9;
 
 
 
@@ -505,53 +558,53 @@ if time_step==3
             ///// 3 - Choc Alimentation et Gaspillage alimentaire /////
             // Alimentation: -20% car on réduit fortement le gaspillage alimentaire
             // Proj_Vol.C.val(15) = Proj_Vol.C.val(15)*0.8;
-            Proj_Vol.C.val(15) = Proj_Vol.C.val(15)*0.95;
+            Proj_Vol.C.val(15,:) = Proj_Vol.C.val(15,:)*0.95;
 
             // Agriculture: -20% de la production agricole du à la réduction du gaspillage alimentaire
             // Proj_Vol.C.val(20) = Proj_Vol.C.val(20)*0.8;
-            Proj_Vol.C.val(20) = Proj_Vol.C.val(20)*0.95;
+            Proj_Vol.C.val(20,:) = Proj_Vol.C.val(20,:)*0.95;
 
 
         elseif with_sufficiency_behaviour=="Achat vehicules neufs"
             ///// 4 - Choc consommation énergétique des ménages sur les transports ////////
             // Secteur automobile: -50% d’achats de véhicules neufs 
             // Proj_Vol.C.val(12) = Proj_Vol.C.val(12)*0.5;
-            Proj_Vol.C.val(12) = Proj_Vol.C.val(12)*0.9;
+            Proj_Vol.C.val(12,:) = Proj_Vol.C.val(12,:)*0.9;
 
         elseif with_sufficiency_behaviour=="Deplacements"
             // Oil consumption: -50% de la consommation du transport (22 % consommation oil est issue des logements /78 % des transports)  
             // Proj_Vol.C.val(2) = Proj_Vol.C.val(2)*0.22*1 + Proj_Vol.C.val(2)*0.78*0.5;
-            Proj_Vol.C.val(2) = Proj_Vol.C.val(2)*0.22*1 + Proj_Vol.C.val(2)*0.78*0.9;
+            Proj_Vol.C.val(2,:) = Proj_Vol.C.val(2,:)*0.22*1 + Proj_Vol.C.val(2,:)*0.78*0.9;
 
         elseif with_sufficiency_behaviour=="OthEq"
             ///// 5 - Choc consommation de biens manufacturés ////////
             // Secteur OthEq: -20% de consommation TV, ordi, smartphone
             // Proj_Vol.C.val(13) = Proj_Vol.C.val(13)*0.8;
-            Proj_Vol.C.val(13) = Proj_Vol.C.val(13)*0.9;
+            Proj_Vol.C.val(13,:) = Proj_Vol.C.val(13,:)*0.9;
 
         elseif with_sufficiency_behaviour=="Electromenager"
             //Secteur Electroménager: -20% de consommation électroménager
             // Proj_Vol.C.val(14) = Proj_Vol.C.val(14)*0.8;
-            Proj_Vol.C.val(14) = Proj_Vol.C.val(14)*0.9;
+            Proj_Vol.C.val(14,:) = Proj_Vol.C.val(14,:)*0.9;
 
         elseif with_sufficiency_behaviour=="OtherManufacturedGoods"
             // Secteur OtherManufacturedGoods: -20% de consommation de vêtements, autres biens manufacturés,...
             // Proj_Vol.C.val(16) = Proj_Vol.C.val(16)*0.8;
-            Proj_Vol.C.val(16) = Proj_Vol.C.val(16)*0.9;
+            Proj_Vol.C.val(16,:) = Proj_Vol.C.val(16,:)*0.9;
 
         elseif with_sufficiency_behaviour=="False"
             // les valeurs de références pour tous les secteurs ci-dessus
-            Proj_Vol.C.val(2) = Proj_Vol.C.val(2);
-            Proj_Vol.C.val(3) = Proj_Vol.C.val(3);
-            Proj_Vol.C.val(4) = Proj_Vol.C.val(4);
-            Proj_Vol.C.val(5) = Proj_Vol.C.val(5);
-            Proj_Vol.C.val(12) = Proj_Vol.C.val(12);
-            Proj_Vol.C.val(13) = Proj_Vol.C.val(13);
-            Proj_Vol.C.val(14) = Proj_Vol.C.val(14);
-            Proj_Vol.C.val(15) = Proj_Vol.C.val(15);
-            Proj_Vol.C.val(16) = Proj_Vol.C.val(16);
-            Proj_Vol.C.val(20) = Proj_Vol.C.val(20);
-            Proj_Vol.C.val(21) = Proj_Vol.C.val(21);
+            Proj_Vol.C.val(2,:) = Proj_Vol.C.val(2,:);
+            Proj_Vol.C.val(3,:) = Proj_Vol.C.val(3,:);
+            Proj_Vol.C.val(4,:) = Proj_Vol.C.val(4,:);
+            Proj_Vol.C.val(5,:) = Proj_Vol.C.val(5,:);
+            Proj_Vol.C.val(12,:) = Proj_Vol.C.val(12,:);
+            Proj_Vol.C.val(13,:) = Proj_Vol.C.val(13,:);
+            Proj_Vol.C.val(14,:) = Proj_Vol.C.val(14,:);
+            Proj_Vol.C.val(15,:) = Proj_Vol.C.val(15,:);
+            Proj_Vol.C.val(16,:) = Proj_Vol.C.val(16,:);
+            Proj_Vol.C.val(20,:) = Proj_Vol.C.val(20,:);
+            Proj_Vol.C.val(21,:) = Proj_Vol.C.val(21,:);
         
 
         elseif with_sufficiency_behaviour=="Construction"
@@ -771,53 +824,52 @@ if time_step==3
             Proj_Vol.C.val(14) = Proj_Vol.C.val(14)*0.8;
 
         
-        elseif with_sufficiency_behaviour=="Construction X Chauffage X Gaspillage alimentaire X Achat vehicules neufs X Deplacements X OthEq X Electromenager X OtherManufacturedGoods"
+        elseif with_sufficiency_behaviour=="Sufficiency Choc S1"
 
-            ////// 1 - Choc Construction durable et Zéro artificialisation nette ////////
-            // Construction: -50% de la construction neuve avec la zero artificialisation des sols
-            Proj_Vol.C.val(21) = Proj_Vol.C.val(21)*0.5;
+             ///// CHOCS ENERGETIQUES ////////
+            // Oil consumption: -72% de la consommation du transport (22 % consommation oil est issue des logements /78 % des transports) et -3% dans le logement
+            Proj_Vol.C.val(2,:) = Proj_Vol.C.val(2,:)*0.22*(1-0.03*32/32) + Proj_Vol.C.val(2,:)*0.78*(1-0.72*32/32);
 
-        
-            ///// 2 - Choc consommation énergétique des ménages sur le logement ////////
-            // Oil consumption: -5% de la consommation du logement (22 % consommation oil est issue des logements /78 % des transports)  
-            // Proj_Vol.C.val(2) = Proj_Vol.C.val(2)*0.22*0.95 + Proj_Vol.C.val(2)*0.78*1;
+            // Gas consumption: -3% de la consommation du logement (100 % consommation gaz issue du logement)
+            Proj_Vol.C.val(3,:) = Proj_Vol.C.val(3,:)*(1-0.03*32/32);
 
-            // Gas consumption: -5% de la consommation du logement (100 % consommation gaz issue du logement)
-            Proj_Vol.C.val(3) = Proj_Vol.C.val(3)*0.95;
+            // Coal consumption: -3% de la consommation du logement (100 % de la consommation du charbon est issue du logement)
+            Proj_Vol.C.val(4,:) = Proj_Vol.C.val(4,:)*(1-0.03*32/32);
 
-            // Coal consumption: -5% de la consommation du logement (100 % de la consommation du charbon est issue du logement)
-            Proj_Vol.C.val(4) = Proj_Vol.C.val(4)*0.95;
+            // Electricity consumption: -3% de la consommation du logement (75% de la consommation électricité issue du logement) + -72% de la consommation du transport (25% de la consommation d'electricité pour le transport)
+            Proj_Vol.C.val(5,:) = Proj_Vol.C.val(5,:)*0.75*(1-0.03*32/32) + Proj_Vol.C.val(5,:)*0.25*(1-0.72*32/32);
 
-            // Electricity consumption: -5% de la consommation du logement (100% de la consommation électricité issue du logement)
-            Proj_Vol.C.val(5) = Proj_Vol.C.val(5)*0.95;
+            ///// CHOC VEHICULES NEUFS ////////
+            // Secteur automobile: -54% d’achats de véhicules neufs 
+            Proj_Vol.C.val(12,:) = Proj_Vol.C.val(12,:)*(1-0.54*32/32);
 
+            ///// CHOC BIENS MANUFACTURES ////////
+            // Secteur OthEq: -10% de consommation TV, ordi, smartphone
+            Proj_Vol.C.val(13,:) = Proj_Vol.C.val(13,:)*(1-0.1*32/32);
 
-            ///// 3 - Choc Alimentation et Gaspillage alimentaire /////
-            // Alimentation: -20% car on réduit fortement le gaspillage alimentaire
-            Proj_Vol.C.val(15) = Proj_Vol.C.val(15)*0.8;
+            // Secteur Electroménager: -66% de consommation électroménager
+            Proj_Vol.C.val(14,:) = Proj_Vol.C.val(14,:)*(1-0.66*32/32);
+            
+            ///// CHOC ALIMENTATION /////
+            // Alimentation: -11% car on réduit fortement le gaspillage alimentaire
+            Proj_Vol.C.val(15,:) = Proj_Vol.C.val(15,:)*(1-0.11*32/32);
 
-            // Agriculture: -20% de la production agricole du à la réduction du gaspillage alimentaire
-            Proj_Vol.C.val(20) = Proj_Vol.C.val(20)*0.8;
+            // Secteur OtherManufacturedGoods: -9% de consommation de vêtements, autres biens manufacturés,...
+            Proj_Vol.C.val(16,:) = Proj_Vol.C.val(16,:)*(1-0.09*32/32);
 
+            ///// CHOC TRANSPORT /////
+            // Secteur LandTransport: -12% des déplacements en bus et train
+            Proj_Vol.C.val(17,:) = Proj_Vol.C.val(17,:)*(1-0.12*32/32);
 
-            ///// 4 - Choc véhicules neufs////////
-            // Secteur automobile: -50% d’achats de véhicules neufs 
-            Proj_Vol.C.val(12) = Proj_Vol.C.val(12)*0.5;
+            // Secteur AirTransport: -79% de la consommation de transport aérien
+            Proj_Vol.C.val(19,:) = Proj_Vol.C.val(19,:)*(1-0.79*32/32);
 
-            ///// 5 - Choc consommation transport + chauffage logement ////////
-            // Oil consumption: -50% de la consommation du transport (22 % consommation oil est issue des logements /78 % des transports)  
-            Proj_Vol.C.val(2) = Proj_Vol.C.val(2)*0.22*0.95 + Proj_Vol.C.val(2)*0.78*0.5;
+            // Agriculture: -3% de la production agricole du à la réduction du gaspillage alimentaire
+            Proj_Vol.C.val(20,:) = Proj_Vol.C.val(20,:)*(1-0.03*32/32);
 
-
-            ///// 6 - Choc consommation de biens manufacturés ////////
-            // Secteur OthEq: -20% de consommation TV, ordi, smartphone
-            Proj_Vol.C.val(13) = Proj_Vol.C.val(13)*0.8;
-
-            // Secteur Electroménager: -20% de consommation électroménager
-            Proj_Vol.C.val(14) = Proj_Vol.C.val(14)*0.8;
-
-            // Secteur OtherManufacturedGoods: -20% de consommation de vêtements, autres biens manufacturés,...
-            Proj_Vol.C.val(16) = Proj_Vol.C.val(16)*0.8;
+            //////  CHOC CONSTRUCTION ////////
+            // Construction: -51% de la construction neuve avec la zero artificialisation des sols
+            Proj_Vol.C.val(21,:) = Proj_Vol.C.val(21,:)*(1-0.51*32/32);
 
         end
     end
