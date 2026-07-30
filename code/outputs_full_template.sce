@@ -155,6 +155,7 @@ OutputTable("FullTemplate_"+ref_name)=[["Variables",    "values_"+Name_time];..
 ["Nominal VA-"+Index_Sectors,    money_disp_adj.*sum(Out.Value_Added,"r")'];..
 ["Nominal GDP-"+Index_Sectors,    money_disp_adj.*sum(Out.GDP_sect,"r")'];..
 ["GFCF_"+Index_DomesticAgents,    money_disp_adj.*Out.GFCF_byAgent(Indice_DomesticAgents)'];..
+["Nominal I_"+Index_Sectors,    money_disp_adj.*sum(Out.I_value,"r")'];..
 ["Disposable income_"+Index_InstitAgents,    money_disp_adj.*Out.Disposable_Income'];..
 ["Disposable income_Households", sum(money_disp_adj.*Out.Disposable_Income(Indice_Households))];..
 //["Gini index (Disposable income)", (1 - 2 * sum(cumsum(H_disposable_income) / sum(H_disposable_income)) / length(H_disposable_income) + 1 / length(H_disposable_income))];..
@@ -198,6 +199,9 @@ HH_saving_Households;
 ["Real M Lasp",    money_disp_adj.*sum(Out.M_value)/M_pLasp];..
 ["Real Y Lasp",    money_disp_adj.*sum(Out.Y_value)/Y_pLasp];..
 ["Real_Trade_Balance Lasp",    money_disp_adj.*(sum(Out.X_value)/X_pLasp-sum(Out.M_value)/M_pLasp)];..
+["Real GDP Lasp_"+Index_Sectors,    money_disp_adj.*(sum(Out.GDP_sect,"r")/GDP_pLasp)'];..
+["Real I Lasp_"+Index_Sectors,    money_disp_adj.*(sum(Out.I_value,"r")/I_pLasp)'];..
+
 ["Real Y Paas",    money_disp_adj.*sum(Out.Y_value)/Y_pPaas];..
 ["Real GDP Paas",    money_disp_adj.*Out.GDP/GDP_pPaas];..
 ["Real C Paas",    money_disp_adj.*sum(Out.C_value)/C_pPaas];..
