@@ -166,10 +166,7 @@ OutputTable("FullTemplate_"+ref_name)=[["Variables",    "values_"+Name_time];..
 ["Gini index (on Gross disposable income)", Gini_indicator_bis(Out.H_disposable_income,Out.Population)];..
 ["FC_Government", sum(Out.G_value)/1000];..
 FC_Households_lines;
-// 1 HOUSEHOLD ["FC_Households_1", sum(Out.C_value)/1000];..
-// we print the 10 Households and the average
-// ["FC_Households", sum(Out.C_value)/1000];..
-// ["FC_"+Index_HouseholdsTEMP, (sum(Out.C_value,"r")/1000)'];..  
+
 
 
 ["FC_"+Index_InstitAgents,    money_disp_adj.*Out.FC_byAgent'];..
@@ -177,9 +174,6 @@ FC_Households_lines;
 ["Net Lending_Households", sum(money_disp_adj.*Out.NetLending(Indice_Households))];..
 ["Country Deficit/GDP-ratio/"+ref_name,    evol_ref.NetLendingRoW_GDP];..
 ["Net Debt"+Index_InstitAgents,    money_disp_adj.*Out.NetFinancialDebt'];..
-// 1 HOUSEHOLD ["HH saving - % ",	 (sum(Out.Household_savings)/sum(Out.H_disposable_income))];..
-// ["HH saving - % ", (sum(Out.Household_savings)/sum(Out.H_disposable_income))];..
-// ["HH saving_"+Index_HouseholdsTEMP, (Household_savings ./H_disposable_income)'];..  
 HH_saving_Households; 
 
 ["---Real terms at "+money_disp_unit+money+" "+ref_name+"---",    ""];..
@@ -246,6 +240,7 @@ HH_saving_Households;
 ["---Quantities ---",    ""];..
 ["Unemployment % points/"+ref_name,    (Out.u_tot - ref.u_tot)*100];..
 ["Unemployment rate",  Out.u_tot ];..
+["Unemployment rate_"+Index_HouseholdsTEMP,  Out.u']
 ["Labour "+Labour_unit,    Out.Labour_tot];..
 ["Labour "+Labour_unit+" ratio/"+ref_name,    evol_ref.Labour_tot];..
 ["Labour "+Index_Sectors+" "+Labour_unit,    Out.Labour'];..
