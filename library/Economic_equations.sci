@@ -271,7 +271,7 @@ endfunction
 function Household_savings = H_Savings_Val_2(H_disposable_income, Household_saving_rate)
 
     /// Household savings constraint (Household_savings)
-    Household_savings = (H_disposable_income - (sum(pC.*C)));
+    Household_savings = (H_disposable_income - sum(pC.*C, "r"));
 		
 endfunction
 
@@ -348,14 +348,6 @@ function y = H_NetLending_Const_1(NetLending, GFCF_byAgent, Household_savings) ;
     y1 = NetLending(Indice_Households) - (Household_savings - GFCF_byAgent(Indice_Households)) ;
 
 	y=y1';		
-endfunction
-
-function y = H_NetLending_Const_2(NetLending, H_disposable_income, pC, C, GFCF_byAgent) ;
-
-    /// Household net lending constraint (NetLending)
-    y1 = NetLending(Indice_Households) - (H_disposable_income - sum(pC.*C, "r") -  GFCF_byAgent(Indice_Households))
-
-    y=y1';      
 endfunction
 
 
@@ -4946,6 +4938,8 @@ endfunction
 
 // For calibration - review
 // Distribution of incomes (according to the distribution shares)
+// input: NetCompWages_byAgent, GOS_byAgent, Other_Transfers, GDP, Distribution_Shares, Labour_income, GrossOpSurplus
+// output: Distribution_Shares
 function [y] = IncomeDistrib_Const_2(NetCompWages_byAgent, GOS_byAgent, Other_Transfers, GDP, Distribution_Shares, Labour_income, GrossOpSurplus) ;
 
     // Amount of labour income received by each institutional agent: NetCompWages_byAgent ( h1_index : hn_index + Government_index + businesses_index )
