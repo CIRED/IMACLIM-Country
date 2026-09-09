@@ -49,7 +49,7 @@ I_pFish;I_pFish_Val_1;pI, I;
 //////////////////////    Income generation and usage - Institutional agents accounts;;;
 ////// Households;;;
 H_disposable_income;H_Income_Val_3;NetCompWages_byAgent, GOS_byAgent, Pensions, Unemployment_transfers, Other_social_transfers, Other_Transfers, ClimPolicyCompens, Property_income, Income_Tax, Other_Direct_Tax;
-Household_savings;H_Savings_Val_2;H_disposable_income, Household_saving_rate;
+Household_savings;H_Savings_Val_2;H_disposable_income, pC, C;
 Consumption_budget;ConsumBudget_Val_1;H_disposable_income, Household_saving_rate;// 1 : share o disposable income / 2 : constant in real term
 ;H_Investment_Const_1;GFCF_byAgent, H_disposable_income, H_Invest_propensity;// Contribution à la FBCF des ménages : 1-part constante du revenu / 2-proportionnellement à la consommation finale en biens immobilier
 //;H_Investment_Const_2;GFCF_byAgent,pC,C;
