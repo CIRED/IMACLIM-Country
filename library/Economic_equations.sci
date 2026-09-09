@@ -268,7 +268,7 @@ function Household_savings = H_Savings_Val_1(H_disposable_income, Household_savi
 		
 endfunction
 
-function Household_savings = H_Savings_Val_2(H_disposable_income, Household_saving_rate)
+function Household_savings = H_Savings_Val_2(H_disposable_income, pC, C)
 
     /// Household savings constraint (Household_savings)
     Household_savings = (H_disposable_income - sum(pC.*C, "r"));
